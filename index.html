@@ -1,0 +1,1404 @@
+<!DOCTYPE html> <!-- V 1.0 -->
+<html lang="pt-BR">
+<head>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/6711/6711626.png" type="image/png">
+  <meta charset="utf-8" />
+  <title>Plataforma Grupo A - v1</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #f2f6fb, #e6edf7);
+    }
+
+    .page {
+      width: 80%;
+      max-width: 900px;
+      margin: 40px auto;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 32px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    }
+
+    .card.center {
+      text-align: center;
+    }
+
+    .header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    }
+
+    .btnReset {
+    background: transparent;
+    border: 2px solid #0078D7;
+    color: #0078D7;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    }
+
+    .btnReset:hover {
+    background: #0078D7;
+    color: #fff;
+    }
+
+
+    h2 {
+      color: #003b5c;
+      margin-top: 0;
+    }
+
+    label {
+      margin-top: 16px;
+      display: block;
+      font-weight: 600;
+      color: #1f2a44;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      margin-top: 6px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #cfd7e3;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: #0078D7;
+      box-shadow: 0 0 0 2px rgba(0,120,215,0.15);
+    }
+
+    .btnGroup {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btnCheck {
+      background: #ffffff;
+      color: #0078D7;
+      border: 2px solid #0078D7;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btnCheck.ativo {
+      background: #0078D7;
+      color: #ffffff;
+    }
+
+    .btnPrimary {
+      margin-top: 24px;
+      width: 100%;
+      background: linear-gradient(135deg, #0078D7, #005ea6);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btnPrimeiro {
+      margin-top: 24px;
+      width: 100%;
+      background: linear-gradient(135deg, #ececec, #ececec);
+      color: #0994ff;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btnPrimary1 {
+      margin-top: 24px;
+      width: 100%;
+      background: linear-gradient(135deg, #0078D7, #005ea6);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .rodape {
+      position: fixed;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: #363636;
+    }
+
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .page {
+        width: 94%;
+      }
+    }
+
+    /* LOADER */
+    .loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.9);
+        display: none;          /* ESSENCIAL */
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .loader.show {
+    display: flex;
+    }
+
+    .logo {
+    max-width: 200px;
+    margin-bottom: 24px;
+    }
+
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 5px solid #cfe4f7;
+      border-top: 5px solid #0078D7;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loader p {
+      margin-top: 16px;
+      font-weight: 600;
+      color: #003b5c;
+    }
+
+    .item-nota {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .item-nota:hover {
+      background: #e6edf7;
+    }
+
+    .item-nota.ativo {
+      background: #0078D7;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .btn-fechar {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        width: 22px;
+        height: 22px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-fechar::before,
+    .btn-fechar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 10px;
+        width: 3px;
+        height: 22px;
+        background: #b3b3b3;
+    }
+
+    .btn-fechar::before {
+        transform: rotate(45deg);
+    }
+
+    .btn-fechar::after {
+        transform: rotate(-45deg);
+    }
+
+    .btn-fechar:hover::before,
+    .btn-fechar:hover::after {
+        background: #c9b506;
+    }
+
+    .calcHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .calcActions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btnTop {
+      padding: 6px 12px;
+      font-size: 14px;
+      border-radius: 20px;
+      border: 2px solid #1976d2;
+      background: white;
+      color: #1976d2;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btnTop:hover {
+      background: #1976d2;
+      color: white;
+    }
+    .cronometroBox {
+      margin-top: 25px;
+      padding: 25px;
+      background: #e9ecef;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .cronometroBox h3 {
+      margin-bottom: 15px;
+      color: #003b5c;
+    }
+
+    .displayTempo {
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin: 20px 0;
+      color: #155e9c;
+    }
+
+    .botoesCronometro {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .botoesCronometro button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #1b75bb, #155e9c);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .botoesCronometro button:hover {
+      transform: scale(1.03);
+      opacity: 0.95;
+    }
+
+    #tempoEstruturado {
+      width: 90%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .resultadoBox {
+      margin-top: 20px;
+      padding: 15px;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+    }
+
+
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+
+<!-- HTML -->
+<body>
+
+<!-- LOADER -->
+<div id="loader" class="loader hidden">
+  <div class="spinner"></div>
+  <p>Estamos consultando a base para iniciar a vistoria, aguarde...</p>
+</div>
+
+<div class="page">
+
+<!--==========================================================================================================-->
+<!-- TELA LOGIN -->
+<section id="login" class="card center">
+  <img src="https://tse3.mm.bing.net/th/id/OIP.hz2ZAWwlTL1aabNTEWeJnwHaHa?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo" class="logo">
+  <h2>Bem-vindo a Plataforma Grupo A </h2>
+
+  <label> Para entrar digite a sua matrícula:</label>
+  <input type="text" id="loginMatricula" />
+
+  <button id="startLogin" class="btnPrimary">  
+    Entrar
+  </button>
+
+  <button id="btnNovoUsuario" class="btnPrimeiro" style="margin-top:10px;">
+    Primeiro acesso
+  </button>
+
+</section>
+
+<!--==========================================================================================================-->
+  <!-- TELA NOVO USUÁRIO -->
+<section  id="novoUsuario" class="card hidden">
+  <h2>Solicitação de novo usuário:</h2>
+  <label>Para poder acessar a ferramenta, por favor preencha o formulário abaixo:</label>
+
+  <label>Nome completo:</label>
+  <input type="text" id="novoNome">
+
+  <label>Matrícula:</label>
+  <input type="text" id="novoMatricula">
+
+  <label for="novaBase">Base:</label>
+  <select id="novaBase">
+    <option value="">Selecione a base...</option>
+    <option>EA Americana</option>
+    <option>EA Amparo</option>
+    <option>EA Araçatuba</option>
+    <option>EA Araraquara</option>
+    <option>EA Barretos</option>
+    <option>EA Batatais</option>
+    <option>EA Bauru Estoril</option>
+    <option>EA Bauru Norte</option>
+    <option>EA Bebedouro</option>
+    <option>EA Birigui</option>
+    <option>EA Botucatu</option>
+    <option>EA CPS Campo Grande</option>
+    <option>EA CPS Centro</option>
+    <option>EA CPS Trevo</option>
+    <option>EA Franca</option>
+    <option>EA Garça</option>
+    <option>EA Ibitinga</option>
+    <option>EA Itapira</option>
+    <option>EA Jaboticabal</option>
+    <option>EA Jaú</option>
+    <option>EA Lençois Paulista</option>
+    <option>EA Lins</option>
+    <option>EA Marilia</option>
+    <option>EA Mirassol</option>
+    <option>EA Monte Alto</option>
+    <option>EA Monte Mor</option>
+    <option>EA Olimpia</option>
+    <option>EA Paulínia</option>
+    <option>EA Piracicaba</option>
+    <option>EA Ribeirão Preto Norte</option>
+    <option>EA Ribeirão Preto Sul</option>
+    <option>EA Santa Terezinha</option>
+    <option>EA São Carlos</option>
+    <option>EA São Joaquim da Barra</option>
+    <option>EA São José do Rio Preto</option>
+    <option>EA Serrana</option>
+    <option>EA Sertãozinho</option>
+    <option>EA SJRP Congonhas</option>
+    <option>EA Sumaré</option>
+  </select>
+
+  <label>Equipe:</label>
+  <input type="text" id="novaEquipe">
+
+  <label>WhatsApp da equipe:</label>
+  <input type="text" id="novaWpp">
+
+  <button id="salvarUsuario" class="btnPrimary">
+    Enviar solicitação
+  </button>
+
+  <button id="voltarLogin" class="btnReset" style="margin-top:10px;">
+    Voltar
+  </button>
+</section>
+
+
+<!--==========================================================================================================-->
+  <!-- TELA INICIAL -->
+<section id="inicio" class="card center hidden">
+  <img src="https://tse3.mm.bing.net/th/id/OIP.hz2ZAWwlTL1aabNTEWeJnwHaHa?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo" class="logo">
+
+    <h2>Menu</h2>
+
+    <p>Selecione qual ferramenta deseja acessar:</p>
+    <button id="startFlow" class="btnPrimary1">
+      Vistoria de Grupo A
+    </button>
+
+    <button id="btnCalculadora" class="btnPrimary1">
+      Calculadora Grupo A
+    </button>
+
+    <button id="btnManutencao" class="btnPrimary1">
+      Manutenção de Ponto
+    </button>
+
+
+  </section>
+
+
+  <!--==========================================================================================================-->
+ <!-- TELA DA CALCULADORA -->
+<section id="calculadora" class="card hidden">
+
+  <div class="calcHeader">
+    <h2>Calculadora</h2>
+
+    <div class="calcActions">
+      <button id="limparCalc" class="btnTop">Apagar tudo</button>
+      <button id="voltarInicioCalc" class="btnTop">Voltar</button>
+    </div>
+  </div>
+
+
+  <div class="cronometroBox">
+  <h3>Cronômetro</h3>
+
+  <div id="displayCronometro" class="displayTempo">00:00:00</div>
+
+  <div class="botoesCronometro">
+    <button onclick="iniciarCronometro()">Iniciar</button>
+    <button onclick="pararCronometro()">Parar</button>
+    <button onclick="zerarCronometro()">Zerar</button>
+  </div>
+
+
+  <label>kd do medidor:</label>
+  <input type="number" id="kd">
+
+  <label>Relação de transformação do TC:</label>
+  <input type="number" id="relacaoTC">
+
+  <label for="relacaoTP">Relação de transformação do TP:</label>
+  <span class="helperText">
+    Se a ligação não possuir TP, inserir 1
+  </span>
+  <input type="number" id="relacaoTP">
+
+  <h3>Para cálculo de kWh</h3>
+  <label>Nº de pulsos/voltas:</label>
+  <input type="number" id="voltasKW">
+
+  <label>Tempo cronometrado (seg):</label>
+  <input type="number" id="tempoKW">
+
+  <h3>Para cálculo de kVARh</h3>
+  <label>Nº de pulsos/voltas:</label>
+  <input type="number" id="voltasKVAR">
+
+  <label>Tempo cronometrado (seg):</label>
+  <input type="number" id="tempoKVAR">
+
+  <h3>Para cálculo de kVA</h3>
+  <label>Corrente da fase V:</label>
+  <input type="number" id="faseV">
+
+  <label>Corrente da fase A:</label>
+  <input type="number" id="faseA">
+
+  <label>Corrente da fase B:</label>
+  <input type="number" id="faseB">
+
+  <label>Corrente da fase maior para o neutro (FN):</label>
+  <input type="number" id="faseNeutro">
+
+  <button id="calcularFP" class="btnPrimary1">
+    Calcular
+  </button>
+
+  <div id="resultadoCalc" style="margin-top:20px; font-size:18px;"></div>
+
+</section>
+
+
+<!--==========================================================================================================-->
+<!-- TELA DE MANUTENÇÃO DE PONTO -->
+<section id="manutencao" class="card hidden">
+
+  <h2>Manutenção de Ponto</h2>
+
+  <div class="acoesTopo">
+    <button class="btnReset" onclick="voltarMenu()">Voltar</button>
+    <button class="btnReset" onclick="recarregarBase()">Recarregar Base</button>
+  </div>
+
+  <label>Escolha a nota:</label>
+
+<div style="position: relative;">
+  <input 
+    type="text" 
+    id="notaPesquisaManut"
+    placeholder="Digite para pesquisar a nota..."
+    autocomplete="off"
+  />
+
+  <button 
+    type="button" 
+    id="fecharListaManut"
+    class="btn-fechar"
+  ></button>
+
+  <div 
+    id="listaNotasManut"
+    style="
+      position:absolute;
+      top:42px;
+      width:100%;
+      max-height:30vh;
+      overflow:auto;
+      background:#fff;
+      border:1px solid #cfd7e3;
+      border-radius:6px;
+      z-index:1000;
+      display:none;
+    ">
+  </div>
+</div>
+
+<input type="hidden" id="notaManut">
+
+  <label>Orientação da manutenção:</label>
+  <textarea id="observacaoManut" readonly></textarea>
+
+</section>
+
+
+<!--==========================================================================================================-->
+  <!-- AQUI VAI A VERSÃO -->
+  <footer class="rodape">
+    ecardosoluz | v1.0 • DPCR - Gerência de Recuperação de Energia
+  </footer>
+
+
+  <!--==========================================================================================================-->
+  <!-- TELA DE PODE OU NÃO LIGAR O CLIENTE -->
+  <section id="resultado" class="card center hidden">
+    <h2 id="resultadoTitulo"></h2>
+    <p id="resultadoTexto"></p>
+    <button id="btnNovo" class="btnPrimary">Finalizar vistoria</button>
+  </section>
+
+
+<!--==========================================================================================================-->
+  <!-- FORMULÁRIO -->
+  <section id="formulario" class="hidden">
+  <div class="header" style="gap:10px;">
+    <button id="btnVoltarForm" class="btnReset">Voltar</button>
+    <button id="btnSair" class="btnReset">Sair</button>
+    <button id="btnReset" class="btnReset">Reiniciar</button>
+    <button id="btnRecarregar" class="btnReset">Recarregar</button>
+  </div>
+
+
+    <div class="card">
+      <form id="notaForm">
+
+        <h2>Vistoria de Ligação Grupo A</h2>
+
+        <label>Qual o número da equipe que está realizando a vistoria?</label>
+        <textarea id="equipe" rows="1"></textarea>
+
+        <label>Escolha a nota que irá realizar a vistoria:</label>
+        <div style="position: relative;">
+          <input 
+            type="text" 
+            id="notaPesquisa" 
+            placeholder="Digite para pesquisar a nota..."
+            autocomplete="off"
+          />
+
+          <button 
+            type="button" 
+            id="fecharLista" 
+            class="btn-fechar"
+        ></button>
+
+
+          <div 
+            id="listaNotas" 
+            style="
+              position:absolute;
+              top:42px;
+              width:100%;
+              max-height:200px;
+              overflow:auto;
+              background:#fff;
+              border:1px solid #cfd7e3;
+              border-radius:6px;
+              z-index:1000;
+              display:none;
+            ">
+          </div>
+        </div>
+
+        <input type="hidden" id="nota" required />
+
+
+        <label>Tipo de Ligação</label>
+        <input type="text" id="TipoLigacao" readonly />
+
+        <div id="perguntas"></div>
+
+        <label>Observação sobre a ligação:</label>
+        <textarea id="obs" rows="5"></textarea>
+
+        <button type="submit" class="btnPrimary">Validar</button>
+
+      </form>
+    </div>
+  </section>
+
+</div>
+
+
+
+<!--===============================================================================================================================================-->
+<!-- AQUI É JS -->
+<script>
+// URL DO AUTOMATE LOGIN
+const LOGIN_URL = "https://default93546618e20a4fd3a8849e33ca7234.a7.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/474f223137964451a0448e4c075df88b/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8BGzoxJn6tWvscN2RhzbfcA_miBCPB6l9a9ADllKgPE"
+
+// URL DO AUTOMATE VISTORIA
+const FLOW_URL = "https://default93546618e20a4fd3a8849e33ca7234.a7.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/39bd48347f4743ab862e9a8793e9d46e/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=sJZCMeCv156VW20qdRJQpdXAhJQTudDvCB7XS-5kiPM";
+
+// URL DO AUTOMATE MANUTENÇÃO DE PONTO
+const MANUT_URL = "https://default93546618e20a4fd3a8849e33ca7234.a7.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/049902e7089c431d8746a347b1435d30/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=b0Wr7JW7i-tp3C0rbGk40VPUVkLR1JJ4wZbpJ-S4XIs"
+
+const loader = document.getElementById('loader');
+
+function showLoader(msg) {
+  loader.querySelector('p').innerText = msg;
+  loader.classList.add('show');
+}
+
+function hideLoader() {
+  loader.classList.remove('show');
+}
+
+// ========== CALCULADORA ===============
+document.getElementById('calcularFP').addEventListener('click', () => {
+
+  const kd = parseFloat(document.getElementById('kd').value);
+  const relacaoTP = parseFloat(document.getElementById('relacaoTP').value);
+  const relacaoTC = parseFloat(document.getElementById('relacaoTC').value);
+
+  const voltasKW = parseFloat(document.getElementById('voltasKW').value);
+  const tempoKW = parseFloat(document.getElementById('tempoKW').value);
+
+  const voltasKVAR = parseFloat(document.getElementById('voltasKVAR').value);
+  const tempoKVAR = parseFloat(document.getElementById('tempoKVAR').value);
+
+  const faseV = parseFloat(document.getElementById('faseV').value);
+  const faseA = parseFloat(document.getElementById('faseA').value);
+  const faseB = parseFloat(document.getElementById('faseB').value);
+  const faseNeutro = parseFloat(document.getElementById('faseNeutro').value);
+
+  if (
+    isNaN(kd) || isNaN(relacaoTC) || isNaN(relacaoTP) ||
+    isNaN(voltasKW) || isNaN(tempoKW) ||
+    isNaN(voltasKVAR) || isNaN(tempoKVAR) ||
+    isNaN(faseV) || isNaN(faseA) ||
+    isNaN(faseB) || isNaN(faseNeutro) ||
+    tempoKW === 0 || tempoKVAR === 0
+  ) {
+    alert('Preencha todos os campos para realizar o cálculo!');
+    return;
+  }
+
+  const kW = (voltasKW * 3.6 * relacaoTP * relacaoTC * kd) / tempoKW;
+  const kVAR = (voltasKVAR * 3.6 * relacaoTP * relacaoTC * kd) / tempoKVAR;
+
+  const fp = kW / Math.sqrt((kW * kW) + (kVAR * kVAR));
+
+  const kVA = ((faseV + faseA + faseB) * faseNeutro) / 1000;
+
+  let cor = 'red';
+  let status = 'BAIXO';
+
+  if (fp >= 0.92) {
+    cor = 'green';
+    status = 'ADEQUADO';
+  }
+
+  document.getElementById('resultadoCalc').innerHTML = `
+    <div>
+      <strong>kVA = </strong> ${kVA.toFixed(2)}<br>
+      <strong>kWh = </strong> ${kW.toFixed(2)}<br>
+      <strong>kVARh = </strong> ${kVAR.toFixed(2)}<br>
+      <strong>Fator de Potência:</strong> 
+      <span style="color:${cor}; font-weight:bold;">
+        ${fp.toFixed(2)} (${status})
+      </span>
+    </div>
+  `;
+
+});
+
+
+// =========== APAGA TUDO NA CALCULADORA ==========
+document.getElementById('limparCalc').addEventListener('click', () => {
+
+  document.getElementById('kd').value = '';
+  document.getElementById('relacaoTP').value = '';
+  document.getElementById('relacaoTC').value = '';
+  document.getElementById('voltasKW').value = '';
+  document.getElementById('tempoKW').value = '';
+  document.getElementById('voltasKVAR').value = '';
+  document.getElementById('tempoKVAR').value = '';
+  document.getElementById('faseV').value = '';
+  document.getElementById('faseA').value = '';
+  document.getElementById('faseB').value = '';
+  document.getElementById('faseNeutro').value = '';
+
+  document.getElementById('resultadoCalc').innerHTML = '';
+
+});
+
+
+// ====== ABRIR CALCULADORA ======
+document.getElementById('btnCalculadora').addEventListener('click', () => {
+  document.getElementById('inicio').classList.add('hidden');
+  document.getElementById('calculadora').classList.remove('hidden');
+});
+
+// ====== VOLTAR PARA INÍCIO ======
+document.getElementById('voltarInicioCalc').addEventListener('click', () => {
+  document.getElementById('calculadora').classList.add('hidden');
+  document.getElementById('inicio').classList.remove('hidden');
+});
+
+
+
+// ============== BOTÃO DE RESET =======================
+document.getElementById('btnReset').addEventListener('click', () => {
+  const ok = confirm('Deseja realmente reiniciar a vistoria? Todos os dados serão perdidos.');
+  if (!ok) return;
+
+  // limpa formulário
+  document.getElementById('notaForm').reset();
+  document.getElementById('perguntas').innerHTML = '';
+  document.getElementById('notaPesquisa').value = '';
+  document.getElementById('nota').value = '';
+  document.getElementById('TipoLigacao').value = '';
+
+});
+
+
+// ============== BOTÃO DE SAIR ===========================
+document.getElementById('btnSair').addEventListener('click', () => {
+  const ok = confirm('Deseja realmente sair? A vistoria atual será perdida.');
+
+  if (!ok) return;
+
+  // limpa tudo
+  document.getElementById('notaForm').reset();
+  document.getElementById('perguntas').innerHTML = '';
+
+  // esconde telas
+  document.getElementById('formulario').classList.add('hidden');
+  document.getElementById('inicio').classList.add('hidden');
+  document.getElementById('resultado').classList.add('hidden');
+
+  // volta para login
+  document.getElementById('login').classList.remove('hidden');
+});
+
+
+// ============== BOTÃO RECARREGAR A BASE =======================
+document.getElementById('btnRecarregar').addEventListener('click', async () => {
+
+  showLoader('Estamos consultando a base novamente, aguarde...');
+
+  try {
+    const res = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ acao: 'iniciar' })
+    });
+
+    if (!res.ok) throw new Error();
+
+    await carregarNotas();
+
+    alert('Base atualizada com sucesso!');
+
+  } catch {
+    alert('Erro ao consultar a base.');
+  } finally {
+    hideLoader();
+  }
+});
+
+
+// ====== VOLTAR (formulário -> início) ======
+    document.getElementById('btnVoltarForm').addEventListener('click', () => {
+      // NÃO limpa o formulário — apenas alterna telas
+      document.getElementById('formulario').classList.add('hidden');
+      document.getElementById('inicio').classList.remove('hidden');
+    });
+
+// ================ ABRIR TELA NOVO USUÁRIO ===================
+document.getElementById('btnNovoUsuario').addEventListener('click', () => {
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('novoUsuario').classList.remove('hidden');
+});
+
+// ================= VOLTAR PARA LOGIN =======================
+document.getElementById('voltarLogin').addEventListener('click', () => {
+  document.getElementById('novoUsuario').classList.add('hidden');
+  document.getElementById('login').classList.remove('hidden');
+});
+
+// ================= AUTOMAÇÃO DO NOVO USUÁRIO ================
+document.getElementById('salvarUsuario').addEventListener('click', async () => {
+
+  const nome = document.getElementById('novoNome').value.trim();
+  const matricula = document.getElementById('novoMatricula').value.trim();
+  const base = document.getElementById('novaBase').value;
+  const equipe = document.getElementById('novaEquipe').value.trim();
+
+  if (!nome || !matricula || !base || !equipe) {
+    alert('Preencha todos os campos.');
+    return;
+  }
+
+  showLoader('Enviando solicitação, aguarde...');
+
+  try {
+
+    // ENDPOINT DO FLUXO DE NOVO USUÁRIO
+    const res = await fetch('https://default93546618e20a4fd3a8849e33ca7234.a7.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4d8d40e0df0947498469d428f8fc6bd9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=cXnFiglEN37qCavQ2UfGixOkb8mUFUnRyJbLtu7wYMA', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        nome,
+        matricula,
+        base,
+        equipe
+      })
+    });
+
+    if (!res.ok) throw new Error();
+
+    alert('Solicitação enviada com sucesso. Entraremos em contato informando se foi aprovado!');
+
+    document.getElementById('novoUsuario').classList.add('hidden');
+    document.getElementById('login').classList.remove('hidden');
+
+  } catch {
+    alert('Erro ao criar usuário.');
+  } finally {
+    hideLoader();
+  }
+
+});
+
+
+// ========== MANUTENÇÃO DE PONTO =======================
+const campoPesquisaManut = document.getElementById('notaPesquisaManut');
+const listaNotasManut = document.getElementById('listaNotasManut');
+const campoNotaManut = document.getElementById('notaManut');
+const btnFecharManut = document.getElementById('fecharListaManut');
+const campoObservacaoManut = document.getElementById('observacaoManut');
+
+let dadosManutencao = [];
+let notaSelecionadaManut = '';
+
+function voltarMenu() {
+  document.getElementById('manutencao').classList.add('hidden');
+  document.getElementById('inicio').classList.remove('hidden');
+}
+
+
+document.getElementById('btnManutencao').addEventListener('click', async () => {
+
+  document.getElementById('inicio').classList.add('hidden');
+  document.getElementById('manutencao').classList.remove('hidden');
+
+  campoPesquisaManut.value = '';
+  campoNotaManut.value = '';
+
+  await carregarNotasManutencao();
+
+});
+
+async function recarregarBase() {
+  await carregarNotasManutencao();
+  renderListaManut(dadosManutencao);
+}
+
+
+async function carregarNotasManutencao() {
+
+  showLoader('Consultando base de manutenção...');
+
+  try {
+    const res = await fetch(MANUT_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ acao: 'listar_manutencao' })
+    });
+
+    dadosManutencao = await res.json();
+
+  } catch {
+    alert('Erro ao carregar base de manutenção.');
+  } finally {
+    hideLoader();
+  }
+}
+
+function renderListaManut(lista) {
+
+  listaNotasManut.innerHTML = '';
+  listaNotasManut.style.display = 'block';
+
+  lista.forEach(r => {
+
+    const item = document.createElement('div');
+    item.textContent = r.Nota;
+    item.className = 'item-nota';
+
+    item.addEventListener('click', () => {
+
+      notaSelecionadaManut = r.Nota;
+      campoPesquisaManut.value = r.Nota;
+      campoNotaManut.value = r.Nota;
+
+      campoObservacaoManut.value = r["OBSERVAÇÃO "]; // <- AQUI
+
+      listaNotasManut.style.display = 'none';
+
+    });
+
+    listaNotasManut.appendChild(item);
+  });
+}
+
+campoPesquisaManut.addEventListener('focus', () => {
+  renderListaManut(dadosManutencao);
+});
+
+campoPesquisaManut.addEventListener('input', () => {
+
+  const filtro = campoPesquisaManut.value.toLowerCase();
+
+  const filtradas = dadosManutencao.filter(r =>
+    String(r.nota).toLowerCase().includes(filtro)
+  );
+
+  renderListaManut(filtradas);
+});
+
+btnFecharManut.addEventListener('click', () => {
+  listaNotasManut.style.display = 'none';
+});
+
+
+// BOTÃO INICIAR
+document.getElementById('startFlow').addEventListener('click', async () => {
+  const loader = document.getElementById('loader');
+  showLoader('Estamos consultando a base, aguarde...');
+
+try {
+    const res = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ acao: 'iniciar' })
+    });
+
+    if (!res.ok) throw new Error();
+
+    hideLoader();
+    document.getElementById('inicio').classList.add('hidden');
+    document.getElementById('formulario').classList.remove('hidden');
+
+    await carregarNotas();
+} catch {
+    alert('Erro ao iniciar fluxo');
+  } finally {
+    hideLoader();
+  }
+});
+
+
+// ================== CRONOMETRO ==============
+let inicioTempo = 0;
+let tempoDecorrido = 0;
+let intervalo = null;
+
+function atualizarDisplay() {
+  const totalMs = tempoDecorrido;
+
+  const minutos = Math.floor(totalMs / 60000);
+  const segundos = Math.floor((totalMs % 60000) / 1000);
+  const milisegundos = Math.floor((totalMs % 1000) / 10); // 3 dígitos
+
+  const formatado =
+    String(minutos).padStart(2, '0') + ':' +
+    String(segundos).padStart(2, '0') + ':' +
+    String(milisegundos).padStart(2, '0');
+
+  document.getElementById('displayCronometro').innerText = formatado;
+
+}
+
+function iniciarCronometro() {
+  if (intervalo) return;
+
+  inicioTempo = Date.now() - tempoDecorrido;
+
+  intervalo = setInterval(() => {
+    tempoDecorrido = Date.now() - inicioTempo;
+    atualizarDisplay();
+  }, 10); // atualiza a cada 10ms
+}
+
+function pararCronometro() {
+  clearInterval(intervalo);
+  intervalo = null;
+}
+
+function zerarCronometro() {
+  pararCronometro();
+  tempoDecorrido = 0;
+  atualizarDisplay();
+}
+
+
+
+let dadosExcel = []
+
+// MOTIVO DA REJEITAS
+function montarMotivoRejeita(qtd) {
+  const motivos = [];
+
+  for (let i = 0; i < qtd; i++) {
+    const check = document.getElementById(`C${i+1}`).value;
+
+    if (check === 'Não') {
+      const textoPergunta = document.getElementById(`P${i+1}`).value;
+      motivos.push(textoPergunta);
+    }
+  }
+
+  // REGISTRA E PULA LINHA
+  return motivos.map(m => `${m} R: Não`).join('\n');
+}
+
+document.getElementById('btnNovo').addEventListener('click', () => {
+      // limpa o formulario
+      document.getElementById('notaForm').reset();
+      document.getElementById('perguntas').innerHTML = '';
+
+      // esconde o resultado
+      document.getElementById('resultado').classList.add('hidden');
+
+      // volta para o inicio
+      document.getElementById('inicio').classList.remove('hidden');
+    });
+
+
+// SUBMIT — ENVIO DA VISTORIA
+document.getElementById('notaForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const loader = document.getElementById('loader');
+  showLoader('Estamos enviando a vistoria, aguarde...');
+
+  try {
+    const r = dadosExcel.find(x => String(x.Nota) === String(nota.value));
+    if (!r) {
+      hideLoader();
+      alert('Err0 ao buscar as notas');
+      return;
+    }
+
+    const qtd = Number(r.QtdPerguntas) || 0;
+
+    // MONTA O MOTIVO DA REJEIÇÃO
+    const motivos = [];
+    for (let i = 0; i < qtd; i++) {
+      if (document.getElementById(`C${i+1}`).value === 'Não') {
+        motivos.push(perguntas[i]);
+      }
+    }
+
+    // COLOCA SE FOI OU NÃO LIGADO
+    const ligado = motivos.length === 0 ? 'SIM' : 'NAO';
+
+
+    // TRAVA: todas as perguntas obrigatórias de sim ou não 
+    for (let i = 0; i < qtd; i++) {
+      const resp = document.getElementById(`C${i+1}`).value;
+      if (!resp) {
+        loader.classList.remove('show');
+        alert('Todas as perguntas são obrigatórias e não será registrado a vistoria sem responde-las!');
+        return;
+      }
+    }
+
+
+    // VARIÁVEIS QUE SÃO ENVIADAS PARA O AUTOMATE
+    const payload = {
+      nota: nota.value,
+      TipoConexao: TipoLigacao.value,
+      QtdPerguntas: qtd,
+      TravaPreenchido: 'SIM',
+      MotivoRejeita: montarMotivoRejeita(qtd),
+      observacao: obs.value,
+      equipe: document.getElementById('equipe').value,
+      ligado: ligado,
+      matricula: document.getElementById('loginMatricula').value.trim()
+    };
+
+    // TRAVA: equipe obrigatória
+    if (!document.getElementById('equipe').value.trim()) {
+      loader.classList.remove('show');
+      alert('O número da equipe é obrigatório, preencha o campo!');
+      return;
+    }
+
+
+    // adiciona perguntas e checks
+    for (let i = 0; i < qtd; i++) {
+      payload[perguntas[i]] = document.getElementById(`P${i+1}`).value;
+      payload[`Check_${perguntas[i]}`] = document.getElementById(`C${i+1}`).value;
+    }
+
+    const res = await fetch(FLOW_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error();
+
+
+    // RESULTADO DA LIGAÇÃO! 
+    const titulo = document.getElementById('resultadoTitulo');
+    const texto = document.getElementById('resultadoTexto');
+
+    if (motivos.length) {
+      titulo.innerText = 'CLIENTE NÃO DEVE SER LIGADO';
+      titulo.style.color = '#c62828'; // vermelho
+      texto.innerText = 'Vistoria concluída, porém foram encontradas pendências no local.';
+    } else {
+      titulo.innerText = 'CLIENTE PODE SER LIGADO';
+      titulo.style.color = '#2e7d32'; // verde
+      texto.innerText = 'Vistoria concluída com sucesso, sem pendências.';
+    }
+
+    // esconde formulário e inicio
+    document.getElementById('inicio').classList.add('hidden');
+    document.getElementById('formulario').classList.add('hidden');
+
+    // mostra a tela resultado
+    document.getElementById('resultado').classList.remove('hidden');
+
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao enviar vistoria');
+  } finally {
+    loader.classList.remove('show');
+  }
+});
+
+
+// QUANTIDADE DE PERGUNTAS QUE PODE SER ACEITA É 80
+const perguntas = Array.from({length:80}, (_,i)=>`Pergunta ${i+1}`);
+
+async function carregarNotas() {
+  const res = await fetch(FLOW_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({acao:'listar'})
+  });
+  dadosExcel = await res.json();
+
+  const sel = document.getElementById('nota');
+  sel.innerHTML = '';
+  dadosExcel.forEach(r => {
+    const o = document.createElement('option');
+    o.value = r.Nota;
+    o.textContent = r.Nota;
+    sel.appendChild(o);
+  });
+}
+
+function montarPerguntas(qtd) {
+  const div = document.getElementById('perguntas');
+  div.innerHTML = '';
+
+  for (let i = 0; i < qtd; i++) {
+    div.innerHTML += `
+      <label>${perguntas[i]}</label>
+      <textarea id="P${i+1}" rows="4" readonly></textarea>
+      <div class="btnGroup">
+        <button type="button" class="btnCheck" data-target="C${i+1}" data-value="Sim">Sim</button>
+        <button type="button" class="btnCheck" data-target="C${i+1}" data-value="Não">Não</button>
+      </div>
+      <input type="hidden" id="C${i+1}">
+    `;
+  }
+}
+
+
+document.getElementById('nota').addEventListener('change', () => {
+  const r = dadosExcel.find(x => String(x.Nota) === String(nota.value));
+  if (!r) return;
+
+  TipoLigacao.value = r.TipoConexao ?? '';
+  const qtd = Number(r.QtdPerguntas) || 0;
+  montarPerguntas(qtd);
+
+  for (let i = 0; i < qtd; i++) {
+    document.getElementById(`P${i+1}`).value = r[perguntas[i]] ?? '';
+  }
+});
+
+addEventListener('click', e => {
+  if (!e.target.classList.contains('btnCheck')) return;
+
+  const { target, value } = e.target.dataset;
+  document.getElementById(target).value = value;
+
+  e.target.parentElement.querySelectorAll('.btnCheck')
+    .forEach(b => b.classList.remove('ativo'));
+  e.target.classList.add('ativo');
+});
+
+// ================ VARIAVEIS GLOBAIS ===================
+
+  const campoPesquisa = document.getElementById('notaPesquisa');
+  const listaNotas = document.getElementById('listaNotas');
+  const campoNotaHidden = document.getElementById('nota');
+  const btnFechar = document.getElementById('fecharLista');
+  let notaSelecionada = '';
+
+  campoPesquisa.addEventListener('focus', () => {
+    renderLista(dadosExcel);
+  });
+
+  campoPesquisa.addEventListener('input', () => {
+    const filtro = campoPesquisa.value.toLowerCase();
+    const filtradas = dadosExcel.filter(r =>
+      String(r.Nota).toLowerCase().includes(filtro)
+    );
+    renderLista(filtradas);
+  });
+
+  btnFechar.addEventListener('click', () => {
+    listaNotas.style.display = 'none';
+  });
+
+    function renderLista(lista) {
+    listaNotas.innerHTML = '';
+    listaNotas.style.display = 'block';
+
+    lista.forEach(r => {
+        const item = document.createElement('div');
+        item.textContent = r.Nota;
+        item.className = 'item-nota';
+
+        if (String(r.Nota) === String(notaSelecionada)) {
+        item.classList.add('ativo');
+        }
+
+        item.addEventListener('click', () => {
+        notaSelecionada = r.Nota;
+
+        campoPesquisa.value = r.Nota;
+        campoNotaHidden.value = r.Nota;
+
+        listaNotas.style.display = 'none';
+
+        campoNotaHidden.dispatchEvent(new Event('change'));
+        });
+
+        listaNotas.appendChild(item);
+    });
+    }
+
+
+
+//==========INICIA O LOGIN =================
+
+    document.getElementById('startLogin').addEventListener('click', async () => {
+    const matricula = document.getElementById('loginMatricula').value.trim();
+
+    if (!matricula) {
+      alert('Informe a matrícula');
+      return;
+    }
+
+      showLoader('Estamos validando seu acesso, aguarde...');
+
+    try {
+      const res = await fetch(LOGIN_URL, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ matricula})
+      });
+
+      const acesso = (await res.text()).trim();
+      
+
+      if (acesso !== 'SIM') {
+        hideLoader();
+        alert('Acesso negado, favor entrar em contato com a DPCR para liberação do usuário!');
+        return;
+      }
+
+      // acesso liberado
+      alert('Acesso liberado!');
+      hideLoader();
+      document.getElementById('login').classList.add('hidden');
+      document.getElementById('inicio').classList.remove('hidden');
+
+    } catch {
+      alert('Erro ao validar acesso.');
+    }
+  });
+
+</script>
+
+</body>
+</html>
