@@ -7,7 +7,7 @@ Esse código foi criado pela DPCR, para dúvidas, procurar Eduardo Cardoso Luz [
   D    D  P       C       R   R
   DDDDD   P        CCCCC  R    R
 
-V2.1
+V1.4
 -->
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -751,10 +751,6 @@ V2.1
       Tabela de Eventos Comentada
     </button>
 
-    <button id="btnSaibaMais" class="btnPrimary1">
-      Saiba Mais
-    </button>
-
   </section>
 
 
@@ -817,13 +813,13 @@ V2.1
     <label>Corrente da fase V:</label>
     <input type="number" id="faseV">
 
-    <label>Tensão da fase A:</label>
+    <label>Corrente da fase A:</label>
     <input type="number" id="faseA">
 
-    <label>Tensão da fase B:</label>
+    <label>Corrente da fase B:</label>
     <input type="number" id="faseB">
 
-    <label>Tensão da fase maior para o neutro (FN):</label>
+    <label>Corrente da fase maior para o neutro (FN):</label>
     <input type="number" id="faseNeutro">
 
     <button id="calcularFP" class="btnPrimary1">
@@ -846,6 +842,7 @@ V2.1
     </div>
 
     <div class="rightHeader">
+      <button class="btnReset" onclick="recarregarBaseTabelaEventos()">Recarregar Base</button>
       <button class="btnReset" onclick="voltarMenuTabelaEventos()">Voltar</button>
     </div>
   </div>
@@ -947,36 +944,11 @@ V2.1
 
 </section>
 
-<!--==========================================================================================================-->
-<!-- SAIBA MAIS -->
-<section id="saibaMais" class="card hidden">
-
-  <div class="calcHeader">
-    <div class="leftHeader">
-      <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" class="tipeIcon">
-      <h1>Saiba Mais</h1>
-    </div>
-
-    <div class="rightHeader">
-      <button class="btnReset" onclick="voltarMenuSaibaMais()">Voltar</button>
-    </div>
-  </div>
-
-  <p>
-    Acesse materiais, procedimentos, documentos e orientações da equipe.
-  </p>
-
-  <button class="btnPrimary1"
-    onclick="window.open('https://cpflenergia.sharepoint.com/:b:/s/GestoDPCR/IQC8N-47oREKRpoHjWk9zmPrAd8AXO0mts7F11tlEWfcq_Q?e=y7hfzX', '_blank')">
-    Abrir SharePoint
-  </button>
-
-</section>
 
 <!--==========================================================================================================-->
   <!-- AQUI VAI A VERSÃO -->
   <footer class="rodape">
-    ecardosoluz | v2.1 • DPCR - Gerência de Recuperação de Energia
+    ecardosoluz | v1.4 • DPCR - Gerência de Recuperação de Energia
   </footer>
 
 
@@ -1039,7 +1011,7 @@ V2.1
 </section>
 
 <!--==========================================================================================================-->
-  <!-- TELA DE REJEITA -->
+  <!-- REJEITA -->
 <section id="rejeita" class="card hidden">
 
   <div class="titleHeader">
@@ -1157,13 +1129,13 @@ V2.1
           </div>
         </div>
 
-        <input type="hidden" id="notaFormHidden" required />
+        <input type="hidden" id="notaForm" required />
 
 
         <label>Tipo de Ligação</label>
         <input type="text" id="TipoLigacao" readonly />
 
-        <div id="perguntasForm"></div>
+        <div id="perguntas"></div>
 
         <!-- CHECKLIST DE REJEITA -->
         <div id="motivoEstruturadoBox" class="hidden">
@@ -2312,8 +2284,6 @@ const MANUT_URL = "https://default93546618e20a4fd3a8849e33ca7234.a7.environment.
 // URL DO AUTOMATE CHECKLIST MANUTENÇÃO (FORMS)
 const FORMS_CHECKLIST_MANUT_URL = "https://default93546618e20a4fd3a8849e33ca7234.a7.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a204ed3c953242e4bf518f4b955ef7e1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=gQxDznA7zKvSL4Ma_k34yqYzls9HgEhRc2T7lDNY_io"
 
-
-
 const loader = document.getElementById('loader');
 const LOADER_TIMEOUT_MS = 120000; // TEMPO DE LOADING ATÉ ERRO!
 const LOADER_TIMEOUT_ALERT = 'Erro ao fazer a ação. Tente novamente.';
@@ -2372,15 +2342,6 @@ function showLoader(msg) {
   }, LOADER_TIMEOUT_MS);
 }
 
-function showLoaderSemTimeout(msg) {
-  hideLoader();
-  loaderTimeoutTriggered = false;
-  loaderAbortController = null;
-  loader.querySelector('p').innerText = msg;
-  loader.classList.add('show');
-  setUiLocked(true);
-}
-
 function hideLoader() {
   if (loaderTimeoutId) {
     clearTimeout(loaderTimeoutId);
@@ -2425,37 +2386,8 @@ function erroFoiTimeoutLoader(error) {
   return loaderTimeoutTriggered && error?.name === 'AbortError';
 }
 
-const APP_START_STATE_KEY = 'plataformaGrupoA.telaInicial';
-
-function esconderTelasApp() {
-  document.querySelectorAll('section').forEach(section => {
-    section.classList.add('hidden');
-  });
-}
-
-function restaurarTelaInicialApp() {
-  const telaInicial = sessionStorage.getItem(APP_START_STATE_KEY) === 'inicio' ? 'inicio' : 'login';
-  esconderTelasApp();
-  document.getElementById(telaInicial)?.classList.remove('hidden');
-}
-
-window.addEventListener('pageshow', restaurarTelaInicialApp);
-restaurarTelaInicialApp();
-
-
-document.getElementById("btnSaibaMais").addEventListener("click", () => {
-  document.getElementById("inicio").classList.add("hidden");
-  document.getElementById("saibaMais").classList.remove("hidden");
-});
-
-function voltarMenuSaibaMais() {
-  document.getElementById("saibaMais").classList.add("hidden");
-  document.getElementById("inicio").classList.remove("hidden");
-}
-
 // ========== CALCULADORA ===============
-const calcularFP = document.getElementById('calcularFP');
-if (calcularFP) calcularFP.addEventListener('click', () => {
+document.getElementById('calcularFP').addEventListener('click', () => {
 
   const kd = parseFloat(document.getElementById('kd').value);
   const relacaoTP = parseFloat(document.getElementById('relacaoTP').value);
@@ -2515,8 +2447,7 @@ if (calcularFP) calcularFP.addEventListener('click', () => {
 
 
 // =========== APAGA TUDO NA CALCULADORA ==========
-const limparCalc = document.getElementById('limparCalc');
-if (limparCalc) limparCalc.addEventListener('click', () => {
+document.getElementById('limparCalc').addEventListener('click', () => {
 
   document.getElementById('kd').value = '';
   document.getElementById('relacaoTP').value = '';
@@ -2536,119 +2467,91 @@ if (limparCalc) limparCalc.addEventListener('click', () => {
 
 
 // ====== ABRIR CALCULADORA ======
-const btnCalculadora = document.getElementById('btnCalculadora');
-if (btnCalculadora) btnCalculadora.addEventListener('click', () => {
+document.getElementById('btnCalculadora').addEventListener('click', () => {
   document.getElementById('inicio').classList.add('hidden');
   document.getElementById('calculadora').classList.remove('hidden');
 });
 
-// ====== VOLTAR PARA INÍCIO CALCULADORA ======
-const voltarInicioCalc = document.getElementById('voltarInicioCalc');
-if (voltarInicioCalc) voltarInicioCalc.addEventListener('click', () => {
+// ====== VOLTAR PARA INÍCIO ======
+document.getElementById('voltarInicioCalc').addEventListener('click', () => {
   document.getElementById('calculadora').classList.add('hidden');
   document.getElementById('inicio').classList.remove('hidden');
 });
 
 
 
-// ============== BOTÃO DE RESET VISTORIA =======================
-const btnReset = document.getElementById('btnReset');
-if (btnReset) btnReset.addEventListener('click', () => {
+// ============== BOTÃO DE RESET =======================
+document.getElementById('btnReset').addEventListener('click', () => {
   const ok = confirm('Deseja realmente reiniciar a vistoria? Todos os dados serão perdidos.');
   if (!ok) return;
 
   // limpa formulário
   document.getElementById('vistoriaForm').reset();
-  document.getElementById('perguntasForm').innerHTML = '';
+  document.getElementById('perguntas').innerHTML = '';
   document.getElementById('notaPesquisaForm').value = '';
-  document.getElementById('notaFormHidden').value = '';
+  document.getElementById('notaForm').value = '';
   document.getElementById('TipoLigacao').value = '';
 
 });
 
-// VOLTA DECISÃO VISTORIA -> MENU
-function voltarMenuValidacao() {
-  document.getElementById('decisaoVistoria').classList.add('hidden');
-  document.getElementById('inicio').classList.remove('hidden');
-}
 
-// VOLTA REJEITA -> DECISÃO
-function voltarDecisao() {
-  document.getElementById('rejeita').classList.add('hidden');
-  document.getElementById('decisaoVistoria').classList.remove('hidden');
-}
-
-
-// ============== BOTÃO DE SAIR DO APP ===========================
-const btnSair = document.getElementById('btnSair');
-if (btnSair) btnSair.addEventListener('click', () => {
+// ============== BOTÃO DE SAIR ===========================
+document.getElementById('btnSair').addEventListener('click', () => {
   const ok = confirm('Deseja realmente sair? Todo o progresso será perdido!');
 
   if (!ok) return;
 
   // limpa tudo
   document.getElementById('vistoriaForm').reset();
-  document.getElementById('perguntasForm').innerHTML = '';
+  document.getElementById('perguntas').innerHTML = '';
 
-  sessionStorage.removeItem(APP_START_STATE_KEY);
-  restaurarTelaInicialApp();
+  // esconde telas
+  document.getElementById('formulario').classList.add('hidden');
+  document.getElementById('inicio').classList.add('hidden');
+  document.getElementById('resultado').classList.add('hidden');
+
+  // volta para login
+  document.getElementById('login').classList.remove('hidden');
 });
 
 
 // ============== BOTÃO RECARREGAR A BASE =======================
-const btnRecarregar = document.getElementById('btnRecarregar');
-if (btnRecarregar) btnRecarregar.addEventListener('click', async () => {
-  showLoader('Recarregando base de notas...');
+document.getElementById('btnRecarregar').addEventListener('click', async () => {
 
-  try {
-    await carregarNotas();
-    alert('Base de notas recarregada.');
-  } catch (error) {
-    if (erroFoiTimeoutLoader(error)) return;
-    console.error(error);
-    alert('Erro ao recarregar a base de notas.');
-  } finally {
-    hideLoader();
-  }
-
+  alert('Para recarregar as notas, selecione novamente a opção "Vistoria de Grupo A".');
   document.getElementById('formulario').classList.add('hidden');
   document.getElementById('inicio').classList.remove('hidden');
 });
 
 
 // ====== VOLTAR (formulário -> início) ======
-const btnVoltarForm = document.getElementById('btnVoltarForm');
-if (btnVoltarForm) btnVoltarForm.addEventListener('click', () => {
-  // NÃO limpa o formulário — apenas alterna telas
-  document.getElementById('formulario').classList.add('hidden');
-  document.getElementById('decisaoVistoria').classList.remove('hidden');
-});
+    document.getElementById('btnVoltarForm').addEventListener('click', () => {
+      // NÃO limpa o formulário — apenas alterna telas
+      document.getElementById('formulario').classList.add('hidden');
+      document.getElementById('inicio').classList.remove('hidden');
+    });
 
 // ================ ABRIR TELA NOVO USUÁRIO ===================
-const btnNovoUsuario = document.getElementById('btnNovoUsuario');
-if (btnNovoUsuario) btnNovoUsuario.addEventListener('click', () => {
+document.getElementById('btnNovoUsuario').addEventListener('click', () => {
   document.getElementById('login').classList.add('hidden');
   document.getElementById('novoUsuario').classList.remove('hidden');
 });
 
 // ================= VOLTAR PARA LOGIN =======================
-const voltarLogin = document.getElementById('voltarLogin');
-if (voltarLogin) voltarLogin.addEventListener('click', () => {
+document.getElementById('voltarLogin').addEventListener('click', () => {
   document.getElementById('novoUsuario').classList.add('hidden');
   document.getElementById('login').classList.remove('hidden');
 });
 
 // ================= AUTOMAÇÃO DO NOVO USUÁRIO ================
-const salvarUsuario = document.getElementById('salvarUsuario');
-if (salvarUsuario) salvarUsuario.addEventListener('click', async () => {
+document.getElementById('salvarUsuario').addEventListener('click', async () => {
 
   const nome = document.getElementById('novoNome').value.trim();
   const matricula = document.getElementById('novoMatricula').value.trim();
   const base = document.getElementById('novaBase').value;
   const equipe = document.getElementById('novaEquipe').value.trim();
-  const wpp = document.getElementById('novaWpp').value.trim();
 
-  if (!nome || !matricula || !base || !equipe || !wpp) {
+  if (!nome || !matricula || !base || !equipe) {
     alert('Preencha todos os campos.');
     return;
   }
@@ -2665,8 +2568,7 @@ if (salvarUsuario) salvarUsuario.addEventListener('click', async () => {
         nome,
         matricula,
         base,
-        equipe,
-        wpp
+        equipe
       })
     });
 
@@ -2690,23 +2592,22 @@ if (salvarUsuario) salvarUsuario.addEventListener('click', async () => {
 // ========== MANUTENÇÃO DE PONTO =======================
 let dadosManutencao = [];
 
-function salvarCacheManutencao(data){
-  localStorage.setItem('cache_manutencao', JSON.stringify(data));
+// VOLTA DECISÃO VISTORIA -> MENU
+function voltarMenuValidacao() {
+  document.getElementById('decisaoVistoria').classList.add('hidden');
+  document.getElementById('inicio').classList.remove('hidden');
 }
 
-function carregarCacheManutencao(){
-  const cache = localStorage.getItem('cache_manutencao');
-  return cache ? JSON.parse(cache) : [];
+// VOLTA REJEITA -> DECISÃO
+function voltarDecisao() {
+  document.getElementById('rejeita').classList.add('hidden');
+  document.getElementById('decisaoVistoria').classList.remove('hidden');
 }
 
 
+async function carregarNotasManutencao() {
 
-
-async function carregarNotasManutencao(mostrarLoader = true) {
-
-  if (mostrarLoader) {
-    showLoader('Consultando base de manutenção...');
-  }
+  showLoader('Consultando base de manutenção...');
 
   try {
     const res = await fetchComLoader(MANUT_URL, {
@@ -2715,25 +2616,13 @@ async function carregarNotasManutencao(mostrarLoader = true) {
       body: JSON.stringify({ acao: 'listar_manutencao' })
     });
 
-    if (!res.ok) throw new Error();
-
     dadosManutencao = await res.json();
 
-    salvarCacheManutencao(dadosManutencao);
-
-    console.log('dadosManutencao:', dadosManutencao);
-
   } catch (error) {
-
-    console.warn('Sem internet, usando cache de manutenção');
-
-    dadosManutencao = carregarCacheManutencao();
-
-    console.log('dadosManutencao:', dadosManutencao);
+    if (erroFoiTimeoutLoader(error)) return;
+    alert('Erro ao carregar base de manutenção.');
   } finally {
-    if (mostrarLoader) {
-      hideLoader();
-    }
+    hideLoader();
   }
 }
 
@@ -2863,6 +2752,18 @@ function atualizarTabelaEventos() {
 function voltarMenuTabelaEventos() {
   document.getElementById('tabelaEventosComentada')?.classList.add('hidden');
   document.getElementById('inicio')?.classList.remove('hidden');
+}
+
+function recarregarBaseTabelaEventos() {
+  if (typeof DEFAULT_TABELA_EVENTOS_COMENTADA === 'undefined') {
+    alert('Base da Tabela de Eventos não foi carregada.');
+    return;
+  }
+
+  baseTabelaEventos = DEFAULT_TABELA_EVENTOS_COMENTADA;
+  salvarBaseTabelaEventosStorage(baseTabelaEventos);
+  atualizarTabelaEventos();
+  alert('Base recarregada com sucesso.');
 }
 
 document.getElementById('btnTabelaEventos')?.addEventListener('click', () => {
@@ -3663,8 +3564,7 @@ function resetarFormsChecklistManut() {
 
 document.getElementById('btnFormsChecklistManut')?.addEventListener('click', async () => {
   if (!dadosManutencao.length) {
-    alert('Base de manutenção não carregada. Faça login novamente.');
-    return;
+    await carregarNotasManutencao();
   }
 
   abrirFormsChecklistManut();
@@ -3756,15 +3656,21 @@ btnEnviarFormsChecklistManut?.addEventListener('click', async () => {
 
 
 // BOTÃO INICIAR
-const startFlow = document.getElementById('startFlow');
-if (startFlow) startFlow.addEventListener('click', async () => {
-  if (!dadosExcel.length) {
-    alert('Base de notas não carregada. Faça login novamente.');
-    return;
-  }
+document.getElementById('startFlow').addEventListener('click', async () => {
+  showLoader('Estamos consultando a base, aguarde...');
+ 
+  try {
+    await carregarNotasDoFlow(true);
 
-  document.getElementById('inicio').classList.add('hidden');
-  document.getElementById('decisaoVistoria').classList.remove('hidden');
+    document.getElementById('inicio').classList.add('hidden');
+    document.getElementById('decisaoVistoria').classList.remove('hidden');
+  } catch (error) {
+    if (erroFoiTimeoutLoader(error)) return;
+    console.error(error);
+    alert('Erro ao carregar notas');
+  } finally {
+    hideLoader();
+  }
 });
 
 
@@ -3813,65 +3719,13 @@ function zerarCronometro() {
 
 
 
-let dadosExcel = [];
-const LS_KEY_NOTAS_CONCLUIDAS = 'plataformaGrupoA.notasConcluidas.v1';
-
-function carregarNotasConcluidas() {
-  try {
-    const cache = JSON.parse(localStorage.getItem(LS_KEY_NOTAS_CONCLUIDAS) || '[]');
-    const itens = Array.isArray(cache) ? cache : [];
-    return new Set(itens.map(valor => String(valor).trim()).filter(Boolean));
-  } catch {
-    return new Set();
-  }
-}
-
-function salvarNotasConcluidas(notas) {
-  const itens = notas instanceof Set ? Array.from(notas) : Array.isArray(notas) ? notas : [];
-  localStorage.setItem(LS_KEY_NOTAS_CONCLUIDAS, JSON.stringify(Array.from(new Set(itens.map(valor => String(valor).trim()).filter(Boolean)))));
-}
-
-function filtrarNotasConcluidas(data) {
-  const concluidas = carregarNotasConcluidas();
-  return Array.isArray(data)
-    ? data.filter(item => {
-        const nota = String(item?.Nota ?? item?.nota ?? '').trim();
-        return nota && !concluidas.has(nota);
-      })
-    : [];
-}
-
-function registrarNotaConcluida(nota) {
-  const notaNormalizada = String(nota ?? '').trim();
-  if (!notaNormalizada) return;
-
-  const concluidas = carregarNotasConcluidas();
-  concluidas.add(notaNormalizada);
-  salvarNotasConcluidas(concluidas);
-
-  dadosExcel = filtrarNotasConcluidas(dadosExcel);
-  salvarCacheNotas(dadosExcel);
-
-  console.log('notas_concluidas:', localStorage.getItem(LS_KEY_NOTAS_CONCLUIDAS));
-  console.log('dadosExcel:', dadosExcel);
-  console.log('fila_envio:', localStorage.getItem('fila_envio'));
-}
-
-if (sessionStorage.getItem(APP_START_STATE_KEY) === 'inicio') {
-  dadosExcel = carregarCacheNotas();
-  dadosManutencao = carregarCacheManutencao();
-
-  console.log('dadosExcel:', dadosExcel);
-  console.log('dadosManutencao:', dadosManutencao);
-  console.log('notas_concluidas:', localStorage.getItem(LS_KEY_NOTAS_CONCLUIDAS));
-  console.log('fila_envio:', localStorage.getItem('fila_envio'));
-}
+let dadosExcel = []
+let notasCarregadas = false;
 
 // DECISÃO DA VISTORIA
-const btnSimVistoria = document.getElementById("btnSimVistoria");
-if (btnSimVistoria) btnSimVistoria.onclick = async () => {
-  if (!dadosExcel.length) {
-    alert('Sem notas carregadas. Faça login com internet ao menos 1 vez para criar o cache.');
+document.getElementById("btnSimVistoria").onclick = async () => {
+  if (!notasCarregadas) {
+    alert('Clique em "Vistoria de Grupo A" para carregar as notas.');
     document.getElementById("decisaoVistoria").classList.add("hidden");
     document.getElementById("inicio").classList.remove("hidden");
     return;
@@ -3879,16 +3733,16 @@ if (btnSimVistoria) btnSimVistoria.onclick = async () => {
 
   document.getElementById("decisaoVistoria").classList.add("hidden");
   document.getElementById("formulario").classList.remove("hidden");
-};
+}
 
-const btnNaoVistoria = document.getElementById("btnNaoVistoria");
-if (btnNaoVistoria) btnNaoVistoria.onclick = () => {
+document.getElementById("btnNaoVistoria").onclick = () => {
+
   document.getElementById("decisaoVistoria").classList.add("hidden");
   document.getElementById("rejeita").classList.remove("hidden");
-};
 
-const btnEnviarRejeita = document.getElementById("enviarRejeita");
-if (btnEnviarRejeita) btnEnviarRejeita.onclick = async () => {
+}
+
+document.getElementById("enviarRejeita").onclick = async () => {
 
   const nota = (document.getElementById("notaRejeita").value || document.getElementById("notaPesquisaRejeita").value || '').trim();
   const motivo = document.getElementById("motivoRejeita").value
@@ -3901,41 +3755,25 @@ if (btnEnviarRejeita) btnEnviarRejeita.onclick = async () => {
 
   showLoader('Estamos salvando a informação, aguarde...');
 
-  const payload = {
-    tipo: "RejeitaSemVistoria",
-    nota: nota,
-    motivo: motivo,
-    rejeitaobs: obs
-  };
+  await fetch(FLOW_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      tipo: "RejeitaSemVistoria",
+      nota: nota,
+      motivo: motivo,
+      rejeitaobs: obs
+    })
+  })
 
-  let enviado = true;
+  hideLoader()
 
-  try {
-    const res = await fetchComLoader(FLOW_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
-
-    if (!res.ok) throw new Error();
-
-  } catch (e) {
-    enviado = false;
-    console.warn('Sem internet, salvando na fila');
-    salvarFila(payload);
-  } finally {
-    hideLoader();
-  }
-
-  console.log('fila_envio:', localStorage.getItem('fila_envio'));
-  registrarNotaConcluida(nota);
-
-  alert(enviado ? "Rejeita registrada com sucesso" : "Sem internet: rejeita salva e será enviada automaticamente.")
+  alert("Rejeita registrada com sucesso")
 
   document.getElementById("rejeita").classList.add("hidden");
   document.getElementById("inicio").classList.remove("hidden");
 
-};
+}
 
 // MOTIVO DA REJEITAS
 function montarMotivoRejeita(qtd) {
@@ -3979,7 +3817,7 @@ function atualizarMotivoRejeitaEstruturada() {
   const checklist = document.getElementById('motivoRejeitaEstruturadaChecklist');
   if (!box || !checklist) return;
 
-  const temNao = Array.from(document.querySelectorAll('#perguntasForm input[id^="C"]'))
+  const temNao = Array.from(document.querySelectorAll('#perguntas input[id^="C"]'))
     .some(el => el.value === 'Não');
 
   if (temNao) {
@@ -4161,13 +3999,13 @@ function resetVistoria() {
   const form = document.getElementById('vistoriaForm');
   if (form) form.reset();
 
-  const perguntasDiv = document.getElementById('perguntasForm');
+  const perguntasDiv = document.getElementById('perguntas');
   if (perguntasDiv) perguntasDiv.innerHTML = '';
 
   const notaPesquisa = document.getElementById('notaPesquisaForm');
   if (notaPesquisa) notaPesquisa.value = '';
 
-  const notaForm = document.getElementById('notaFormHidden');
+  const notaForm = document.getElementById('notaForm');
   if (notaForm) notaForm.value = '';
 
   const tipoLigacao = document.getElementById('TipoLigacao');
@@ -4193,10 +4031,8 @@ function resetVistoria() {
   }
 }
 
-const btnNovo = document.getElementById('btnNovo');
-if (btnNovo) btnNovo.addEventListener('click', () => {
-  const nota = document.getElementById('notaFormHidden');
-  const notaSelecionada = nota?.value ?? '';
+document.getElementById('btnNovo').addEventListener('click', () => {
+  const notaSelecionada = document.getElementById('notaForm').value;
   const r = dadosExcel.find(x => String(x.Nota) === String(notaSelecionada));
   if (!r) {
     alert('Selecione uma nota válida.');
@@ -4275,8 +4111,7 @@ if (btnNovo) btnNovo.addEventListener('click', () => {
   document.getElementById('resultado').classList.remove('hidden');
 });
 
-const btnVoltarResultado = document.getElementById('btnVoltarResultado');
-if (btnVoltarResultado) btnVoltarResultado.addEventListener('click', () => {
+document.getElementById('btnVoltarResultado').addEventListener('click', () => {
   document.getElementById('resultado').classList.add('hidden');
   document.getElementById('formulario').classList.remove('hidden');
 
@@ -4289,8 +4124,7 @@ if (btnVoltarResultado) btnVoltarResultado.addEventListener('click', () => {
 
 
 // SUBMIT — ENVIO DA VISTORIA
-const vistoriaForm = document.getElementById('vistoriaForm');
-if (vistoriaForm) vistoriaForm.addEventListener('submit', async (e) => {
+document.getElementById('vistoriaForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const btnSubmit = document.getElementById('btnSubmitVistoria');
@@ -4301,12 +4135,11 @@ if (vistoriaForm) vistoriaForm.addEventListener('submit', async (e) => {
   showLoader('Estamos enviando a vistoria, aguarde...');
 
   try {
-    const nota = document.getElementById('notaFormHidden');
-    const notaSelecionada = nota?.value ?? '';
+    const notaSelecionada = document.getElementById('notaForm').value;
     const r = dadosExcel.find(x => String(x.Nota) === String(notaSelecionada));
     if (!r) {
       hideLoader();
-      alert('Erro ao buscar as notas');
+      alert('Err0 ao buscar as notas');
       return;
     }
 
@@ -4389,29 +4222,16 @@ if (vistoriaForm) vistoriaForm.addEventListener('submit', async (e) => {
       payload[`Check_${perguntas[i]}`] = document.getElementById(`C${i+1}`).value;
     }
 
-    let enviado = true;
+    const res = await fetchComLoader(FLOW_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
 
-    try {
-      const res = await fetchComLoader(FLOW_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(payload)
-      });
-
-      if (!res.ok) throw new Error();
-
-    } catch (e) {
-      enviado = false;
-      console.warn('Sem internet, salvando na fila');
-      salvarFila(payload);
-    }
-
-    console.log('fila_envio:', localStorage.getItem('fila_envio'));
-
+    if (!res.ok) throw new Error();
     envioOk = true;
-    registrarNotaConcluida(notaSelecionada);
 
-    alert(enviado ? 'Vistoria registrada com sucesso' : 'Sem internet: vistoria salva e será enviada automaticamente.');
+    alert('Vistoria registrada com sucesso');
     resetVistoria();
 
     document.getElementById('resultado').classList.add('hidden');
@@ -4433,81 +4253,27 @@ if (vistoriaForm) vistoriaForm.addEventListener('submit', async (e) => {
 // QUANTIDADE DE PERGUNTAS QUE PODE SER ACEITA É 80
 const perguntas = Array.from({length:80}, (_,i)=>`Pergunta ${i+1}`);
 
-function salvarCacheNotas(data){
-  localStorage.setItem('cache_notas', JSON.stringify(data));
+async function carregarNotas(force = false) {
+  if (notasCarregadas && !force) return;
+  throw new Error('Notas não carregadas. Use o botão "Vistoria de Grupo A" (startFlow).');
 }
 
-function carregarCacheNotas(){
-  const cache = localStorage.getItem('cache_notas');
-  const dados = cache ? JSON.parse(cache) : [];
-  return filtrarNotasConcluidas(dados);
+async function carregarNotasDoFlow(force = false) {
+  if (notasCarregadas && !force) return;
+
+  const res = await fetchComLoader(FLOW_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ acao: 'listar' })
+  });
+  if (!res.ok) throw new Error('FLOW_URL listar falhou');
+
+  dadosExcel = await res.json();
+  notasCarregadas = true;
 }
-
-async function carregarNotas() {
-  try {
-    const res = await fetchComLoader(FLOW_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({acao:'listar'})
-    });
-
-    if (!res.ok) throw new Error();
-
-    dadosExcel = filtrarNotasConcluidas(await res.json());
-
-    salvarCacheNotas(dadosExcel);
-
-    console.log('Dados carregados da API');
-
-  } catch (e) {
-
-    console.warn('Sem internet, usando cache');
-
-    dadosExcel = carregarCacheNotas();
-  }
-
-  console.log('dadosExcel:', dadosExcel);
-  console.log('notas_concluidas:', localStorage.getItem(LS_KEY_NOTAS_CONCLUIDAS));
-  console.log('fila_envio:', localStorage.getItem('fila_envio'));
-}
-
-function salvarFila(payload){
-  const fila = JSON.parse(localStorage.getItem('fila_envio') || '[]');
-  fila.push(payload);
-  localStorage.setItem('fila_envio', JSON.stringify(fila));
-}
-
-async function reenviarFila(){
-  let fila = JSON.parse(localStorage.getItem('fila_envio') || '[]');
-
-  if (!fila.length) return;
-
-  const novaFila = [];
-
-  for (const payload of fila){
-    try {
-      const res = await fetch(FLOW_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(payload)
-      });
-
-      if (!res.ok) throw new Error();
-
-    } catch {
-      novaFila.push(payload);
-    }
-  }
-
-  localStorage.setItem('fila_envio', JSON.stringify(novaFila));
-
-  console.log('fila_envio:', localStorage.getItem('fila_envio'));
-}
-
-setInterval(reenviarFila, 300000);
 
 function montarPerguntas(qtd) {
-  const div = document.getElementById('perguntasForm');
+  const div = document.getElementById('perguntas');
   div.innerHTML = '';
 
   for (let i = 0; i < qtd; i++) {
@@ -4526,8 +4292,7 @@ function montarPerguntas(qtd) {
 }
 
 
-const notaFormHidden = document.getElementById('notaFormHidden');
-if (notaFormHidden) notaFormHidden.addEventListener('change', (e) => {
+document.getElementById('notaForm').addEventListener('change', (e) => {
   const notaSelecionada = e.target.value;
   const r = dadosExcel.find(x => String(x.Nota) === String(notaSelecionada));
   if (!r) return;
@@ -4633,7 +4398,7 @@ function setupListaNotas({ inputId, listId, hiddenId, closeId }) {
 setupListaNotas({
   inputId: 'notaPesquisaForm',
   listId: 'listaNotasForm',
-  hiddenId: 'notaFormHidden',
+  hiddenId: 'notaForm',
   closeId: 'fecharListaForm'
 });
 
@@ -4646,17 +4411,15 @@ setupListaNotas({
 
 //==========INICIA O LOGIN =================
 
-const startLogin = document.getElementById('startLogin');
-if (startLogin) {
-  startLogin.addEventListener('click', async () => {
-    const matricula = document.getElementById('loginMatricula')?.value?.trim() ?? '';
+    document.getElementById('startLogin').addEventListener('click', async () => {
+    const matricula = document.getElementById('loginMatricula').value.trim();
 
     if (!matricula) {
       alert('Informe a matrícula');
       return;
     }
 
-    showLoaderSemTimeout('Estamos validando seu acesso, aguarde...');
+      showLoader('Estamos validando seu acesso, aguarde...');
 
     try {
       const res = await fetchComLoader(LOGIN_URL, {
@@ -4666,30 +4429,31 @@ if (startLogin) {
       });
 
       const acesso = (await res.text()).trim();
+      
 
       if (acesso !== 'SIM') {
+        hideLoader();
         alert('Acesso negado, favor entrar em contato com a DPCR para liberação do usuário!');
         return;
       }
 
       // acesso liberado
-      await carregarNotas();
-      await carregarNotasManutencao(false);
-
       alert('Acesso liberado!');
-      sessionStorage.setItem(APP_START_STATE_KEY, 'inicio');
-      restaurarTelaInicialApp();
+      hideLoader();
+      document.getElementById('login').classList.add('hidden');
+      document.getElementById('inicio').classList.remove('hidden');
 
     } catch (error) {
       if (erroFoiTimeoutLoader(error)) return;
-      alert('Erro ao validar acesso, verifique a internet');
+      alert('Erro ao validar acesso.');
     } finally {
       hideLoader();
     }
   });
-}
 
 </script>
 
 </body>
 </html>
+
+
