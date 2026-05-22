@@ -7,7 +7,7 @@ Esse código foi criado pela DPCR, para dúvidas, procurar Eduardo Cardoso Luz [
   D    D  P       C       R   R
   DDDDD   P        CCCCC  R    R
 
-V2.3
+V2.0
 -->
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -966,19 +966,60 @@ V2.3
     Acesse materiais, procedimentos, documentos e orientações da equipe.
   </p>
 
-  <button class="btnPrimary1"
-    onclick="window.open('https://github.com/ecardosocpfl-star/Saiba-Mais-Plataforma-Grupo-A/blob/main/GED-2855.pdf', '_blank')">
-    Abrir SharePoint
-  </button>
+  <div id="saibaMaisLista" style="display:flex; flex-direction:column; gap:10px; margin-top:12px;"></div>
 
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+    <button id="btnSaibaMaisEditar" class="btnReset">Editar links</button>
+    <button id="btnSaibaMaisRestaurar" class="btnReset">Restaurar padrão</button>
+  </div>
+
+  <div id="saibaMaisEditor" class="hidden" style="margin-top:12px;">
+    <label for="saibaMaisEditorTextarea">Links (JSON)</label>
+    <textarea id="saibaMaisEditorTextarea" rows="8" style="width:100%;"></textarea>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+      <button id="btnSaibaMaisSalvar" type="button" class="btnPrimary">Salvar</button>
+      <button id="btnSaibaMaisCancelar" type="button" class="btnReset">Cancelar</button>
+    </div>
+
+    <p style="font-size:12px; opacity:.85; margin-top:10px;">
+      Formato: [{"title":"Nome do material","url":"https://..."}]
+    </p>
+  </div>
+
+</section>
+
+<!--==========================================================================================================-->
+<!-- VISUALIZADOR (SAIBA MAIS) -->
+<section id="saibaMaisViewer" class="card hidden">
+  <div class="calcHeader">
+    <div class="leftHeader">
+      <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" class="tipeIcon">
+      <h1 id="saibaMaisViewerTitulo">Material</h1>
+    </div>
+
+    <div class="rightHeader">
+      <button id="btnSaibaMaisViewerVoltar" class="btnReset" type="button">Voltar</button>
+    </div>
+  </div>
+
+  <p style="margin-top:0; opacity:.85; font-size:12px;">
+    Se o visualizador ficar em branco, use o botão "Abrir/Baixar" na lista (alguns sites bloqueiam visualização interna).
+  </p>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 14px;">
+    <button id="btnSaibaMaisViewerDireto" class="btnReset" type="button">Ver direto</button>
+    <button id="btnSaibaMaisViewerGoogle" class="btnReset" type="button">Ver via Google (PDF)</button>
+  </div>
+
+  <iframe id="saibaMaisViewerFrame" style="width:100%; height:72vh; border:1px solid #cfd7e3; border-radius:8px; background:#fff;"></iframe>
 </section>
 
 <!--==========================================================================================================-->
   <!-- AQUI VAI A VERSÃO -->
   <footer class="rodape">
-    ecardosoluz | v2.3 • DPCR - Gerência de Recuperação de Energia
+    ecardosoluz | v3.0 • DPCR - Gerência de Recuperação de Energia
   </footer>
-
 
 <!--==========================================================================================================-->
 <!-- TELA DE PODE OU NÃO LIGAR O CLIENTE -->
@@ -1096,7 +1137,7 @@ V2.3
   </select>
 
   <label>Descreva o que impediu a vistoria:</label>
-  <textarea id="obsRejeita" rows="6"></textarea>
+  <textarea id="obsRejeita" rows="4"></textarea>
 
   <button id="enviarRejeita" class="btnPrimary">
     Registrar rejeita
@@ -2446,11 +2487,275 @@ restaurarTelaInicialApp();
 document.getElementById("btnSaibaMais").addEventListener("click", () => {
   document.getElementById("inicio").classList.add("hidden");
   document.getElementById("saibaMais").classList.remove("hidden");
+  renderSaibaMaisDocs();
 });
 
 function voltarMenuSaibaMais() {
   document.getElementById("saibaMais").classList.add("hidden");
   document.getElementById("inicio").classList.remove("hidden");
+}
+
+// ================== SAIBA MAIS (links dinâmicos) ==============
+const LS_KEY_SAIBA_MAIS_DOCS = 'plataformaGrupoA.saibaMaisDocs.v1';
+const SAIBA_MAIS_DOCS_DEFAULT = [
+  {
+    title: 'GED-2855 (PDF)',
+    url: 'https://github.com/ecardosocpfl-star/Saiba-Mais-Plataforma-Grupo-A/blob/main/GED-2855.pdf'
+  },
+  {
+    title: 'Abrir SharePoint (materiais)',
+    url: 'https://cpflenergia.sharepoint.com/:b:/s/GestoDPCR/IQC8N-47oREKRpoHjWk9zmPrAd8AXO0mts7F11tlEWfcq_Q?e=y7hfzX'
+  }
+];
+let saibaMaisViewerDocAtual = null;
+
+function normalizarUrlSaibaMais(url) {
+  const value = String(url ?? '').trim();
+
+  // Converte link "blob" do GitHub para link direto (raw.githubusercontent.com)
+  // Ex.: https://github.com/<org>/<repo>/blob/<branch>/<path>
+  const m = value.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/i);
+  if (m) {
+    return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}/${m[4]}`;
+  }
+
+  return value;
+}
+
+function validarSaibaMaisDocs(docs) {
+  const itens = Array.isArray(docs) ? docs : [];
+
+  const normalizados = itens
+    .map(item => {
+      const title = String(item?.title ?? '').trim();
+      const url = normalizarUrlSaibaMais(item?.url ?? '');
+      return { title, url };
+    })
+    .filter(item => item.title && item.url);
+
+  return normalizados;
+}
+
+function lerSaibaMaisDocs() {
+  try {
+    const raw = localStorage.getItem(LS_KEY_SAIBA_MAIS_DOCS);
+    if (!raw) return SAIBA_MAIS_DOCS_DEFAULT;
+    return validarSaibaMaisDocs(JSON.parse(raw));
+  } catch {
+    return SAIBA_MAIS_DOCS_DEFAULT;
+  }
+}
+
+function salvarSaibaMaisDocs(docs) {
+  try {
+    localStorage.setItem(LS_KEY_SAIBA_MAIS_DOCS, JSON.stringify(validarSaibaMaisDocs(docs)));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function openExternalUrl(url) {
+  try {
+    const w = window.open(String(url || ''), '_blank', 'noopener,noreferrer');
+    if (w) w.opener = null;
+  } catch {
+    window.open(String(url || ''), '_blank');
+  }
+}
+
+function urlEhPdf(url) {
+  return /\.pdf(\?|#|$)/i.test(String(url || ''));
+}
+
+function getGoogleViewerUrl(url) {
+  return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(String(url || ''))}`;
+}
+
+function saibaMaisViewerModoDireto() {
+  const frame = document.getElementById('saibaMaisViewerFrame');
+  if (!frame) return;
+  frame.src = saibaMaisViewerDocAtual?.url || 'about:blank';
+}
+
+function saibaMaisViewerModoGoogle() {
+  const frame = document.getElementById('saibaMaisViewerFrame');
+  if (!frame) return;
+
+  const url = saibaMaisViewerDocAtual?.url || '';
+  if (!urlEhPdf(url)) {
+    alert('O modo Google é recomendado apenas para PDFs.');
+    return;
+  }
+
+  frame.src = getGoogleViewerUrl(url);
+}
+
+function abrirSaibaMaisViewer(doc) {
+  const titulo = document.getElementById('saibaMaisViewerTitulo');
+  const btnGoogle = document.getElementById('btnSaibaMaisViewerGoogle');
+
+  saibaMaisViewerDocAtual = doc;
+  if (titulo) titulo.innerText = doc.title || 'Material';
+  if (btnGoogle) btnGoogle.disabled = !urlEhPdf(doc?.url);
+  saibaMaisViewerModoDireto();
+
+  document.getElementById('saibaMais').classList.add('hidden');
+  document.getElementById('saibaMaisViewer').classList.remove('hidden');
+}
+
+function voltarSaibaMaisViewer() {
+  const frame = document.getElementById('saibaMaisViewerFrame');
+  if (frame) frame.src = 'about:blank';
+  saibaMaisViewerDocAtual = null;
+
+  document.getElementById('saibaMaisViewer').classList.add('hidden');
+  document.getElementById('saibaMais').classList.remove('hidden');
+}
+
+function abrirSaibaMaisEditor() {
+  const editor = document.getElementById('saibaMaisEditor');
+  const textarea = document.getElementById('saibaMaisEditorTextarea');
+  if (!editor || !textarea) return;
+
+  textarea.value = JSON.stringify(lerSaibaMaisDocs(), null, 2);
+  editor.classList.remove('hidden');
+}
+
+function fecharSaibaMaisEditor() {
+  const editor = document.getElementById('saibaMaisEditor');
+  if (!editor) return;
+  editor.classList.add('hidden');
+}
+
+function renderSaibaMaisDocs() {
+  const lista = document.getElementById('saibaMaisLista');
+  if (!lista) return;
+
+  const docs = lerSaibaMaisDocs();
+  lista.innerHTML = '';
+
+  if (!docs.length) {
+    const vazio = document.createElement('p');
+    vazio.style.opacity = '0.85';
+    vazio.textContent = 'Nenhum material configurado.';
+    lista.appendChild(vazio);
+    return;
+  }
+
+  docs.forEach(doc => {
+    const linha = document.createElement('div');
+    linha.style.display = 'flex';
+    linha.style.alignItems = 'center';
+    linha.style.justifyContent = 'space-between';
+    linha.style.gap = '12px';
+    linha.style.flexWrap = 'wrap';
+
+    const titulo = document.createElement('div');
+    titulo.style.flex = '1';
+    titulo.style.minWidth = '220px';
+    titulo.textContent = doc.title;
+
+    const acoes = document.createElement('div');
+    acoes.style.display = 'flex';
+    acoes.style.gap = '10px';
+    acoes.style.flexWrap = 'wrap';
+
+    const btnVer = document.createElement('button');
+    btnVer.type = 'button';
+    btnVer.className = 'btnPrimary1';
+    btnVer.textContent = 'Visualizar';
+    btnVer.addEventListener('click', () => abrirSaibaMaisViewer(doc));
+
+    const btnAbrir = document.createElement('button');
+    btnAbrir.type = 'button';
+    btnAbrir.className = 'btnReset';
+    btnAbrir.textContent = 'Abrir/Baixar';
+    btnAbrir.addEventListener('click', () => openExternalUrl(doc.url));
+
+    acoes.appendChild(btnVer);
+    acoes.appendChild(btnAbrir);
+
+    linha.appendChild(titulo);
+    linha.appendChild(acoes);
+
+    lista.appendChild(linha);
+  });
+
+  // Wire editor actions (safe to call multiple times)
+  const btnEditar = document.getElementById('btnSaibaMaisEditar');
+  const btnRestaurar = document.getElementById('btnSaibaMaisRestaurar');
+  const btnSalvar = document.getElementById('btnSaibaMaisSalvar');
+  const btnCancelar = document.getElementById('btnSaibaMaisCancelar');
+  const btnVoltarViewer = document.getElementById('btnSaibaMaisViewerVoltar');
+  const btnViewerDireto = document.getElementById('btnSaibaMaisViewerDireto');
+  const btnViewerGoogle = document.getElementById('btnSaibaMaisViewerGoogle');
+
+  if (btnEditar && !btnEditar.dataset.bound) {
+    btnEditar.dataset.bound = '1';
+    btnEditar.addEventListener('click', abrirSaibaMaisEditor);
+  }
+
+  if (btnRestaurar && !btnRestaurar.dataset.bound) {
+    btnRestaurar.dataset.bound = '1';
+    btnRestaurar.addEventListener('click', () => {
+      try {
+        localStorage.removeItem(LS_KEY_SAIBA_MAIS_DOCS);
+      } catch {}
+      fecharSaibaMaisEditor();
+      renderSaibaMaisDocs();
+      alert('Links restaurados para o padrão.');
+    });
+  }
+
+  if (btnSalvar && !btnSalvar.dataset.bound) {
+    btnSalvar.dataset.bound = '1';
+    btnSalvar.addEventListener('click', () => {
+      const textarea = document.getElementById('saibaMaisEditorTextarea');
+      if (!textarea) return;
+
+      try {
+        const parsed = JSON.parse(textarea.value || '[]');
+        const validados = validarSaibaMaisDocs(parsed);
+
+        if (!validados.length) {
+          alert('Informe ao menos 1 link válido no formato JSON.');
+          return;
+        }
+
+        const ok = salvarSaibaMaisDocs(validados);
+        if (!ok) {
+          alert('Não foi possível salvar (armazenamento indisponível neste navegador).');
+          return;
+        }
+        fecharSaibaMaisEditor();
+        renderSaibaMaisDocs();
+        alert('Links atualizados com sucesso.');
+      } catch {
+        alert('JSON inválido. Verifique aspas e vírgulas.');
+      }
+    });
+  }
+
+  if (btnCancelar && !btnCancelar.dataset.bound) {
+    btnCancelar.dataset.bound = '1';
+    btnCancelar.addEventListener('click', fecharSaibaMaisEditor);
+  }
+
+  if (btnVoltarViewer && !btnVoltarViewer.dataset.bound) {
+    btnVoltarViewer.dataset.bound = '1';
+    btnVoltarViewer.addEventListener('click', voltarSaibaMaisViewer);
+  }
+
+  if (btnViewerDireto && !btnViewerDireto.dataset.bound) {
+    btnViewerDireto.dataset.bound = '1';
+    btnViewerDireto.addEventListener('click', saibaMaisViewerModoDireto);
+  }
+
+  if (btnViewerGoogle && !btnViewerGoogle.dataset.bound) {
+    btnViewerGoogle.dataset.bound = '1';
+    btnViewerGoogle.addEventListener('click', saibaMaisViewerModoGoogle);
+  }
 }
 
 // ========== CALCULADORA ===============
