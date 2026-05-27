@@ -231,17 +231,23 @@ V2.2
       cursor: pointer;
     }
 
-    .btnWpp {
-      margin-top: 24px;
-      width: 100%;
-      background: linear-gradient(135deg, #128c7e, #128c7e);
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
+    .btnIconWpp{
+      border:none;
+      background:transparent;
+      cursor:pointer;
+
+      display:flex;
+      flex-direction:column; /* deixa um embaixo do outro */
+      align-items:center;
+      justify-content:center;
+
+      gap:2px;
+      padding:0;
+    }
+
+    .btnIconWpp img{
+      width:32px;
+      height:32px;
     }
 
     .rodape {
@@ -728,13 +734,10 @@ V2.2
   <label>WhatsApp da equipe:</label>
   <input type="text" id="novaWpp">
 
-  <label>Grupo no WhatsApp para tirar dúvidas:</label>
-  <button class="btnWpp"
-    onclick="window.open('https://chat.whatsapp.com/CVW3BqouYnS9bPO1b6ZFiq?mode=gi_t', '_blank')">
-    WhatsApp
-  </button>
-
-  <label>
+<button class="btnWpp"
+      onclick="window.open('https://chat.whatsapp.com/CVW3BqouYnS9bPO1b6ZFiq?mode=gi_t', '_blank')">
+      Grupo no WhatsApp para tirar dúvidas
+    </button>
 
   </label>
   <button id="salvarUsuario" class="btnPrimary">
@@ -748,9 +751,22 @@ V2.2
   <!-- TELA INICIAL -->
 <section id="inicio" class="card center hidden">
 
-  <div class="header" style="gap:10px;">
+  <div class="header" style="gap:9px;">
       <button id="btnSair" class="btnReset">Sair</button>
-    </div>
+
+
+      <button class="btnIconWpp"
+      onclick="window.open('https://chat.whatsapp.com/CVW3BqouYnS9bPO1b6ZFiq?mode=gi_t', '_blank')">
+
+      <img src="https://cdn-icons-png.flaticon.com/128/4494/4494494.png" alt="WhatsApp" >
+
+      <span>
+        Suporte
+      </span>
+
+      </button>
+
+  </div>
 
   <img src="https://tse3.mm.bing.net/th/id/OIP.hz2ZAWwlTL1aabNTEWeJnwHaHa?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Logo" class="logo">
 
@@ -775,11 +791,6 @@ V2.2
 
     <button id="btnChecklistProjetista" class="btnPrimary1">
       Checklist do Projetista
-    </button>
-
-    <button class="btnWpp"
-      onclick="window.open('https://chat.whatsapp.com/CVW3BqouYnS9bPO1b6ZFiq?mode=gi_t', '_blank')">
-      Grupo no WhatsApp para tirar dúvidas
     </button>
 
   </section>
@@ -2520,7 +2531,7 @@ if (btnVoltarChecklistProjetista) btnVoltarChecklistProjetista.addEventListener(
 
 const btnAbrirChecklistProjetista = document.getElementById('btnAbrirChecklistProjetista');
 if (btnAbrirChecklistProjetista) btnAbrirChecklistProjetista.addEventListener('click', () => {
-  window.open(encodeURI('Checklist do Projetista.pdf'), '_blank');
+  window.open(encodeURI('Checklist do Projetista.pdf'), '_blank'); // CAMINHO DO ARQUIVO
 });
 
 // ========== CALCULADORA ===============
