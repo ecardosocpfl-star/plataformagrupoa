@@ -7,7 +7,7 @@ Esse código foi criado pela DPCR, para dúvidas, procurar Eduardo Cardoso Luz [
   D    D  P       C       R   R
   DDDDD   P        CCCCC  R    R
 
-V2.2
+V2.3
 -->
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -554,6 +554,189 @@ V2.2
       min-height: 90px;
       resize: vertical;
     }
+
+    .geradorManutencao {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid #dbe7f3;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+    }
+
+    .geradorManutencao h3 {
+      margin: 0 0 6px;
+      color: #1f2a44;
+    }
+
+    .geradorManutencao p {
+      margin: 0;
+      color: #5d6b82;
+      line-height: 1.45;
+    }
+
+    .geradorManutencaoBloco {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #e6edf7;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+
+    .geradorManutencaoTitulo {
+      margin: 0 0 10px;
+      color: #1f2a44;
+      font-weight: 700;
+    }
+
+    .geradorManutencaoCampos {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .geradorManutencaoGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .geradorManutencaoBloco.hidden,
+    .geradorManutencaoCampos.hidden {
+      display: none;
+    }
+
+    .geradorManutencaoCampo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .geradorManutencaoCampo label {
+      font-weight: 600;
+      color: #1f2a44;
+    }
+
+    .geradorManutencaoCampo select,
+    .geradorManutencaoCampo input,
+    .geradorManutencaoCampo textarea {
+      width: 100%;
+      margin-top: 0;
+    }
+
+    .geradorManutencaoObservacao textarea,
+    #textoPadraoGerado {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .geradorManutencaoContador {
+      font-size: 12px;
+      color: #5d6b82;
+      text-align: right;
+    }
+
+    .geradorManutencaoAcoes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .geradorManutencaoComparativo {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+      margin: 14px auto 0;
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .geradorManutencaoComparativoArrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      color: #0078d7;
+      min-width: 28px;
+      padding: 0 2px;
+    }
+
+    .geradorManutencaoCard {
+      border: 1px solid #cfd7e3;
+      border-radius: 14px;
+      background: #ffffff;
+      padding: 16px;
+      box-shadow: 0 1px 0 rgba(15, 23, 42, 0.02);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .geradorManutencaoCardHeader {
+      margin: 0 0 4px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2a44;
+    }
+
+    .geradorManutencaoCardSubheader {
+      margin: 0 0 14px;
+      text-align: center;
+      color: #5d6b82;
+      font-weight: 600;
+    }
+
+    .geradorManutencaoCardFields {
+      display: grid;
+      gap: 12px;
+    }
+
+    .geradorManutencaoSharedField {
+      margin: 14px auto 0;
+      display: grid;
+      gap: 6px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .geradorManutencaoLocalCard {
+      margin: 0 auto;
+      padding: 18px 20px 20px;
+      max-width: 980px;
+    }
+
+    .geradorManutencaoLocalCard .geradorManutencaoCardHeader {
+      margin-bottom: 16px;
+    }
+
+    .geradorManutencaoLocalCard .geradorManutencaoSharedField {
+      margin-top: 0;
+    }
+
+    .geradorManutencaoLocalCard .geradorManutencaoSharedField label {
+      margin-top: 0;
+    }
+
+    .geradorManutencaoLocalGrid {
+      margin-top: 16px;
+    }
+
+    @media (max-width: 720px) {
+      .geradorManutencaoGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .geradorManutencaoComparativo {
+        grid-template-columns: 1fr;
+      }
+
+      .geradorManutencaoComparativoArrow {
+        transform: rotate(90deg);
+        margin: -6px 0;
+      }
+    }
   
     .titleHeader{
       display:flex;
@@ -760,9 +943,7 @@ V2.2
 
       <img src="https://cdn-icons-png.flaticon.com/128/4494/4494494.png" alt="WhatsApp" >
 
-      <span>
-        Suporte
-      </span>
+      <span>Grupo para dúvidas</span>
 
       </button>
 
@@ -1002,6 +1183,169 @@ V2.2
   <label for="observacaoFormsChecklistManut">Orientação da manutenção:</label>
   <textarea id="observacaoFormsChecklistManut" readonly rows="3"></textarea>
 
+  <div class="geradorManutencao" id="geradorManutencao">
+    <h3>Texto de observação da nota</h3>
+    <p>Marque as opções e preencha os dados para montar o texto padrão da observação da nota no OFS!</p>
+
+    <div class="geradorManutencaoBloco">
+      <div class="geradorManutencaoTitulo">Teve troca de medidor?</div>
+      <div class="btnGroup">
+        <button type="button" class="btnCheck" id="btnGeradorTrocaMedidorSim">Sim</button>
+        <button type="button" class="btnCheck" id="btnGeradorTrocaMedidorNao">Não</button>
+      </div>
+
+      <div id="geradorTrocaMedidorSimCampos" class="geradorManutencaoCampos hidden">
+        <div class="geradorManutencaoComparativo">
+          <div class="geradorManutencaoCard">
+            <div class="geradorManutencaoCardHeader">Antes da Manutenção</div>
+            <div class="geradorManutencaoCardSubheader">Inserir os equipamentos:</div>
+            <div class="geradorManutencaoCardFields">
+              <div class="geradorManutencaoCampo">
+                <label for="geradorMedidorRetirado">Medidor retirado:</label>
+                <input type="text" id="geradorMedidorRetirado" autocomplete="off" />
+              </div>
+
+              <div class="geradorManutencaoCampo">
+                <label for="geradorIpRetirado">IP do modem retirado:</label>
+                <input type="text" id="geradorIpRetirado" autocomplete="off" placeholder="Ex.: 10.44.111.222" />
+              </div>
+
+              <div class="geradorManutencaoCampo">
+                <label for="geradorPortaRetirada">Porta do modem retirado:</label>
+                <input type="text" id="geradorPortaRetirada" inputmode="numeric" autocomplete="off" placeholder="Ex.: 2191" />
+              </div>
+            </div>
+          </div>
+
+          <div class="geradorManutencaoComparativoArrow">&rarr;</div>
+
+          <div class="geradorManutencaoCard">
+            <div class="geradorManutencaoCardHeader">Depois da Manutenção</div>
+            <div class="geradorManutencaoCardSubheader">Inserir os equipamentos:</div>
+            <div class="geradorManutencaoCardFields">
+              <div class="geradorManutencaoCampo">
+                <label for="geradorMedidorInstalado">Medidor instalado:</label>
+                <input type="text" id="geradorMedidorInstalado" autocomplete="off" />
+              </div>
+
+              <div class="geradorManutencaoCampo">
+                <label for="geradorIpInstalado">IP do modem instalado:</label>
+                <input type="text" id="geradorIpInstalado" autocomplete="off" placeholder="Ex.: 10.44.111.222" />
+              </div>
+
+              <div class="geradorManutencaoCampo">
+                <label for="geradorPortaInstalada">Porta do modem instalado:</label>
+                <input type="text" id="geradorPortaInstalada" inputmode="numeric" autocomplete="off" placeholder="Ex.: 2191" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="geradorTrocaMedidorNaoBloco" class="geradorManutencaoBloco hidden">
+      <div id="geradorTrocaIpPergunta" class="geradorManutencaoCampo">
+        <div class="geradorManutencaoTitulo">Teve troca de IP?</div>
+        <div class="btnGroup">
+          <button type="button" class="btnCheck" id="btnGeradorTrocaIpSim">Sim</button>
+          <button type="button" class="btnCheck" id="btnGeradorTrocaIpNao">Não</button>
+        </div>
+      </div>
+
+      <div id="geradorTrocaMedidorNaoSemIpCampos" class="geradorManutencaoCampos hidden">
+        <div class="geradorManutencaoCard geradorManutencaoLocalCard">
+          <div class="geradorManutencaoCardHeader">Informações do Local</div>
+
+          <div class="geradorManutencaoSharedField">
+            <label for="geradorModemLocal">Qual o modem no local?</label>
+            <select id="geradorModemLocal">
+              <option value="">Selecione</option>
+              <option value="3G">3G</option>
+              <option value="4G">4G</option>
+            </select>
+          </div>
+
+          <div class="geradorManutencaoGrid geradorManutencaoLocalGrid">
+            <div class="geradorManutencaoCampo">
+              <label for="geradorIpLocal">IP do modem que está no local:</label>
+              <input type="text" id="geradorIpLocal" autocomplete="off" placeholder="Ex.: 10.44.111.222" />
+            </div>
+
+            <div class="geradorManutencaoCampo">
+              <label for="geradorPortaLocal">Porta do modem no local:</label>
+              <input type="text" id="geradorPortaLocal" inputmode="numeric" autocomplete="off" placeholder="Ex.: 502" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="geradorTrocaMedidorNaoComIpCampos" class="geradorManutencaoCampos hidden">
+        <div class="geradorManutencaoSharedField">
+          <label for="geradorModemLocalTrocaIp">Qual o modem no local:</label>
+          <select id="geradorModemLocalTrocaIp">
+            <option value="">Selecione</option>
+            <option value="3G">3G</option>
+            <option value="4G">4G</option>
+          </select>
+        </div>
+
+        <div class="geradorManutencaoComparativo">
+          <div class="geradorManutencaoCard">
+            <div class="geradorManutencaoCardHeader">Antes</div>
+            <div class="geradorManutencaoCardSubheader">IP / porta retirados</div>
+            <div class="geradorManutencaoCardFields">
+              <div class="geradorManutencaoCampo">
+                <label for="geradorIpRetiradoTrocaIp">IP do modem retirado:</label>
+                <input type="text" id="geradorIpRetiradoTrocaIp" autocomplete="off" placeholder="Ex.: 10.44.111.222" />
+              </div>
+
+              <div class="geradorManutencaoCampo">
+                <label for="geradorPortaRetiradaTrocaIp">Porta do modem retirado:</label>
+                <input type="text" id="geradorPortaRetiradaTrocaIp" inputmode="numeric" autocomplete="off" placeholder="Ex.: 2191" />
+              </div>
+            </div>
+          </div>
+
+          <div class="geradorManutencaoComparativoArrow">&rarr;</div>
+
+          <div class="geradorManutencaoCard">
+            <div class="geradorManutencaoCardHeader">Depois</div>
+            <div class="geradorManutencaoCardSubheader">IP / porta instalados</div>
+            <div class="geradorManutencaoCardFields">
+              <div class="geradorManutencaoCampo">
+                <label for="geradorIpInstaladoTrocaIp">IP do modem instalado:</label>
+                <input type="text" id="geradorIpInstaladoTrocaIp" autocomplete="off" placeholder="Ex.: 10.44.111.222" />
+              </div>
+
+              <div class="geradorManutencaoCampo">
+                <label for="geradorPortaInstaladaTrocaIp">Porta do modem instalado:</label>
+                <input type="text" id="geradorPortaInstaladaTrocaIp" inputmode="numeric" autocomplete="off" placeholder="Ex.: 2191" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="geradorObservacaoBloco" class="geradorManutencaoBloco hidden">
+      <div class="geradorManutencaoCampo geradorManutencaoObservacao">
+        <label id="geradorObservacaoEquipeLabel" for="geradorObservacaoEquipe">Observação da equipe</label>
+        <textarea id="geradorObservacaoEquipe" rows="3" maxlength="230" placeholder="Digite a observação da equipe"></textarea>
+        <div class="geradorManutencaoContador" id="geradorObservacaoEquipeContador">0/230</div>
+      </div>
+    </div>
+
+    <div id="geradorSaidaBloco" class="geradorManutencaoBloco hidden">
+      <div class="geradorManutencaoCampo">
+        <label for="textoPadraoGerado">Texto padrão gerado</label>
+        <textarea id="textoPadraoGerado" readonly rows="5" placeholder="O texto padrão será montado aqui."></textarea>
+      </div>
+
+      <div class="geradorManutencaoAcoes">
+        <button id="btnCopiarTextoPadrao" type="button" class="btnReset">Copiar texto gerado</button>
+      </div>
+    </div>
+  </div>
+
   <div id="formsChecklistManutPerguntas"></div>
 
   <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
@@ -1039,7 +1383,7 @@ V2.2
 <!--==========================================================================================================-->
   <!-- AQUI VAI A VERSÃO -->
   <footer class="rodape">
-    ecardosoluz | v2.2 • DPCR - Gerência de Recuperação de Energia
+    ecardosoluz | v2.3 • DPCR - Gerência de Recuperação de Energia
   </footer>
 
 
@@ -2531,7 +2875,7 @@ if (btnVoltarChecklistProjetista) btnVoltarChecklistProjetista.addEventListener(
 
 const btnAbrirChecklistProjetista = document.getElementById('btnAbrirChecklistProjetista');
 if (btnAbrirChecklistProjetista) btnAbrirChecklistProjetista.addEventListener('click', () => {
-  window.open(encodeURI('Checklist do Projetista.pdf'), '_blank'); // CAMINHO DO ARQUIVO
+  window.open(encodeURI('Checklist do Projetista.pdf'), '_blank');
 });
 
 // ========== CALCULADORA ===============
@@ -2975,6 +3319,39 @@ const listaNotasFormsChecklistManut = document.getElementById('listaNotasFormsCh
 const campoNotaFormsChecklistManut = document.getElementById('notaFormsChecklistManut');
 const btnFecharListaFormsChecklistManut = document.getElementById('fecharListaFormsChecklistManut');
 const campoObservacaoFormsChecklistManut = document.getElementById('observacaoFormsChecklistManut');
+const previewPacotesFormsChecklistManut = document.getElementById('previewPacotesFormsChecklistManut');
+const geradorFormsChecklistManutEls = {
+  trocaMedidorSim: document.getElementById('btnGeradorTrocaMedidorSim'),
+  trocaMedidorNao: document.getElementById('btnGeradorTrocaMedidorNao'),
+  trocaIpSim: document.getElementById('btnGeradorTrocaIpSim'),
+  trocaIpNao: document.getElementById('btnGeradorTrocaIpNao'),
+  trocaMedidorSimCampos: document.getElementById('geradorTrocaMedidorSimCampos'),
+  trocaMedidorNaoBloco: document.getElementById('geradorTrocaMedidorNaoBloco'),
+  trocaMedidorNaoSemIpCampos: document.getElementById('geradorTrocaMedidorNaoSemIpCampos'),
+  trocaMedidorNaoComIpCampos: document.getElementById('geradorTrocaMedidorNaoComIpCampos'),
+  trocaIpPergunta: document.getElementById('geradorTrocaIpPergunta'),
+  observacaoBloco: document.getElementById('geradorObservacaoBloco'),
+  saidaBloco: document.getElementById('geradorSaidaBloco'),
+  observacaoLabel: document.getElementById('geradorObservacaoEquipeLabel'),
+  observacaoCampo: document.getElementById('geradorObservacaoEquipe'),
+  observacaoContador: document.getElementById('geradorObservacaoEquipeContador'),
+  textoPadrao: document.getElementById('textoPadraoGerado'),
+  btnCopiarTextoPadrao: document.getElementById('btnCopiarTextoPadrao'),
+  medidorRetirado: document.getElementById('geradorMedidorRetirado'),
+  ipRetirado: document.getElementById('geradorIpRetirado'),
+  portaRetirada: document.getElementById('geradorPortaRetirada'),
+  medidorInstalado: document.getElementById('geradorMedidorInstalado'),
+  ipInstalado: document.getElementById('geradorIpInstalado'),
+  portaInstalada: document.getElementById('geradorPortaInstalada'),
+  modemLocal: document.getElementById('geradorModemLocal'),
+  ipLocal: document.getElementById('geradorIpLocal'),
+  portaLocal: document.getElementById('geradorPortaLocal'),
+  modemLocalTrocaIp: document.getElementById('geradorModemLocalTrocaIp'),
+  ipRetiradoTrocaIp: document.getElementById('geradorIpRetiradoTrocaIp'),
+  portaRetiradaTrocaIp: document.getElementById('geradorPortaRetiradaTrocaIp'),
+  ipInstaladoTrocaIp: document.getElementById('geradorIpInstaladoTrocaIp'),
+  portaInstaladaTrocaIp: document.getElementById('geradorPortaInstaladaTrocaIp')
+};
 const btnEnviarFormsChecklistManut = document.getElementById('btnEnviarFormsChecklistManut');
 
 
@@ -2984,6 +3361,10 @@ let formsChecklistManutRendered = false;
 let formsChecklistManutSaveTimer = null;
 const formsChecklistManutFields = new Map();
 let registroSelecionadoFormsChecklistManut = null;
+const formsChecklistManutGeradorState = {
+  trocaMedidor: '',
+  trocaIp: ''
+};
 
 const FORMS_CHECKLIST_MANUT_IDS_BASE = new Set([
   'CHECKMANUTEQP',
@@ -3214,6 +3595,189 @@ function agendarSalvarRespostasFormsChecklistManut() {
     formsChecklistManutSaveTimer = null;
     salvarRespostasFormsChecklistManutStorage();
   }, 300);
+}
+
+function normalizarTextoFormsChecklistManut(valor) {
+  return String(valor ?? '').trim();
+}
+
+function obterCenarioGeradorFormsChecklistManut() {
+  if (formsChecklistManutGeradorState.trocaMedidor === 'sim') return 'troca_medidor';
+  if (formsChecklistManutGeradorState.trocaMedidor === 'nao' && formsChecklistManutGeradorState.trocaIp === 'nao') return 'sem_troca_ip';
+  if (formsChecklistManutGeradorState.trocaMedidor === 'nao' && formsChecklistManutGeradorState.trocaIp === 'sim') return 'com_troca_ip';
+  return '';
+}
+
+function obterLimiteObservacaoGeradorFormsChecklistManut() {
+  const cenario = obterCenarioGeradorFormsChecklistManut();
+  if (cenario === 'troca_medidor') return 180; // Troca de medidor
+  if (cenario === 'sem_troca_ip') return 200; // Sem troca de medidor e IP
+  if (cenario === 'com_troca_ip') return 190; // Sem troca de medidor mas trocado  o IP
+  return 230;
+}
+
+function atualizarBotaoAtivoFormsChecklistManut(botao, ativo) {
+  if (!botao) return;
+  botao.classList.toggle('ativo', ativo);
+  botao.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+}
+
+function construirTextoPadraoGeradorFormsChecklistManut() {
+  const cenario = obterCenarioGeradorFormsChecklistManut();
+  if (!cenario) return '';
+
+  const observacao = normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.observacaoCampo?.value);
+  const juntarPartes = (partes) => {
+    const validas = partes.filter(Boolean);
+    return validas.length ? `${validas.join(' ')}.` : '';
+  };
+
+  if (cenario === 'troca_medidor') {
+    return juntarPartes([
+      'Medidor foi trocado no local',
+      '\n',
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.medidorRetirado?.value) && `Med.Ret ${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.medidorRetirado.value)}`,
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipRetirado?.value) && `IP ${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipRetirado.value)}`,
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaRetirada?.value) && `:${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaRetirada.value)}`,
+      '\n',
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.medidorInstalado?.value) && `Med.Inst ${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.medidorInstalado.value)}`,
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipInstalado?.value) && `IP ${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipInstalado.value)}`,
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaInstalada?.value) && `:${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaInstalada.value)}`,
+      '\n',
+      observacao && `Obs.Equipe:${observacao}`
+    ]);
+  }
+
+  const modemLocal = normalizarTextoFormsChecklistManut(
+    cenario === 'sem_troca_ip'
+      ? geradorFormsChecklistManutEls.modemLocal?.value
+      : geradorFormsChecklistManutEls.modemLocalTrocaIp?.value
+  );
+
+  if (cenario === 'sem_troca_ip') {
+    return juntarPartes([
+      'Sem troca de IP e Medidor',
+      '\n',
+      modemLocal && `Local com modem ${modemLocal}`,
+      '\n',
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipLocal?.value) && `IP.NoLocal ${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipLocal.value)}`,
+      normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaLocal?.value) && `:${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaLocal.value)}`,
+      '\n',
+      observacao && `Observação da equipe: ${observacao}`
+    ]);
+  }
+
+  return juntarPartes([
+    'Trocado somente o IP',
+    '\n',
+    modemLocal && `Local com modem ${modemLocal}`,
+    normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipRetiradoTrocaIp?.value) && `IP.Ret ${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipRetiradoTrocaIp.value)}`,
+    normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaRetiradaTrocaIp?.value) && `:${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaRetiradaTrocaIp.value)}`,
+    '\n',
+    normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipInstaladoTrocaIp?.value) && `IP.Inst ${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.ipInstaladoTrocaIp.value)}`,
+    normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaInstaladaTrocaIp?.value) && `:${normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.portaInstaladaTrocaIp.value)}`,
+    '\n',
+    observacao && `Observação da equipe: ${observacao}`
+  ]);
+}
+
+function atualizarGeradorFormsChecklistManut() {
+  const cenario = obterCenarioGeradorFormsChecklistManut();
+  const trocaMedidorSim = formsChecklistManutGeradorState.trocaMedidor === 'sim';
+  const trocaMedidorNao = formsChecklistManutGeradorState.trocaMedidor === 'nao';
+  const trocaIpSim = formsChecklistManutGeradorState.trocaIp === 'sim';
+  const trocaIpNao = formsChecklistManutGeradorState.trocaIp === 'nao';
+
+  atualizarBotaoAtivoFormsChecklistManut(geradorFormsChecklistManutEls.trocaMedidorSim, trocaMedidorSim);
+  atualizarBotaoAtivoFormsChecklistManut(geradorFormsChecklistManutEls.trocaMedidorNao, trocaMedidorNao);
+  atualizarBotaoAtivoFormsChecklistManut(geradorFormsChecklistManutEls.trocaIpSim, trocaIpSim);
+  atualizarBotaoAtivoFormsChecklistManut(geradorFormsChecklistManutEls.trocaIpNao, trocaIpNao);
+
+  geradorFormsChecklistManutEls.trocaMedidorSimCampos?.classList.toggle('hidden', !trocaMedidorSim);
+  geradorFormsChecklistManutEls.trocaMedidorNaoBloco?.classList.toggle('hidden', !trocaMedidorNao);
+  geradorFormsChecklistManutEls.trocaIpPergunta?.classList.toggle('hidden', !trocaMedidorNao);
+  geradorFormsChecklistManutEls.trocaMedidorNaoSemIpCampos?.classList.toggle('hidden', !(trocaMedidorNao && trocaIpNao));
+  geradorFormsChecklistManutEls.trocaMedidorNaoComIpCampos?.classList.toggle('hidden', !(trocaMedidorNao && trocaIpSim));
+
+  const observacaoAtiva = cenario !== '';
+  geradorFormsChecklistManutEls.observacaoBloco?.classList.toggle('hidden', !observacaoAtiva);
+  geradorFormsChecklistManutEls.saidaBloco?.classList.toggle('hidden', !observacaoAtiva);
+  geradorFormsChecklistManutEls.observacaoCampo?.setAttribute('maxlength', String(obterLimiteObservacaoGeradorFormsChecklistManut()));
+
+  const limite = obterLimiteObservacaoGeradorFormsChecklistManut();
+  const observacaoAtual = normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.observacaoCampo?.value);
+  if (geradorFormsChecklistManutEls.observacaoLabel) {
+    geradorFormsChecklistManutEls.observacaoLabel.textContent = observacaoAtiva
+      ? `Observação da equipe (limite de ${limite} caracteres)`
+      : 'Observação da equipe';
+  }
+
+  if (geradorFormsChecklistManutEls.observacaoContador) {
+    geradorFormsChecklistManutEls.observacaoContador.textContent = observacaoAtiva
+      ? `${observacaoAtual.length}/${limite}`
+      : '0/0';
+  }
+
+  if (geradorFormsChecklistManutEls.textoPadrao) {
+    geradorFormsChecklistManutEls.textoPadrao.value = observacaoAtiva
+      ? construirTextoPadraoGeradorFormsChecklistManut()
+      : '';
+  }
+}
+
+function limparGeradorFormsChecklistManut() {
+  formsChecklistManutGeradorState.trocaMedidor = '';
+  formsChecklistManutGeradorState.trocaIp = '';
+
+  [
+    geradorFormsChecklistManutEls.medidorRetirado,
+    geradorFormsChecklistManutEls.ipRetirado,
+    geradorFormsChecklistManutEls.portaRetirada,
+    geradorFormsChecklistManutEls.medidorInstalado,
+    geradorFormsChecklistManutEls.ipInstalado,
+    geradorFormsChecklistManutEls.portaInstalada,
+    geradorFormsChecklistManutEls.modemLocal,
+    geradorFormsChecklistManutEls.ipLocal,
+    geradorFormsChecklistManutEls.portaLocal,
+    geradorFormsChecklistManutEls.modemLocalTrocaIp,
+    geradorFormsChecklistManutEls.ipRetiradoTrocaIp,
+    geradorFormsChecklistManutEls.portaRetiradaTrocaIp,
+    geradorFormsChecklistManutEls.ipInstaladoTrocaIp,
+    geradorFormsChecklistManutEls.portaInstaladaTrocaIp,
+    geradorFormsChecklistManutEls.observacaoCampo,
+    geradorFormsChecklistManutEls.textoPadrao
+  ].forEach(el => {
+    if (!el) return;
+    el.value = '';
+  });
+
+  atualizarGeradorFormsChecklistManut();
+}
+
+async function copiarTextoGeradorFormsChecklistManut() {
+  const texto = normalizarTextoFormsChecklistManut(geradorFormsChecklistManutEls.textoPadrao?.value);
+  if (!texto) {
+    alert('Gere um texto antes de copiar.');
+    return;
+  }
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(texto);
+    } else {
+      const campo = geradorFormsChecklistManutEls.textoPadrao;
+      if (!campo) return;
+      campo.focus();
+      campo.select();
+      document.execCommand('copy');
+      campo.setSelectionRange(0, 0);
+    }
+
+    alert('Texto copiado.');
+  } catch (error) {
+    console.error(error);
+    alert('Não foi possível copiar automaticamente. Selecione o texto manualmente.');
+  }
 }
 
 function renderListaFormsChecklistManut(lista) {
@@ -3651,6 +4215,7 @@ function abrirFormsChecklistManut() {
   renderFormsChecklistManut();
   preencherCamposFormsChecklistManut();
   atualizarVisibilidadeFormsChecklistManut();
+  atualizarGeradorFormsChecklistManut();
 
   setTimeout(() => {
     elFormsChecklistManutPerguntas?.querySelector('.formsQuestion:not(.hidden) input, .formsQuestion:not(.hidden) textarea')?.focus();
@@ -3684,6 +4249,7 @@ function resetarFormsChecklistManut() {
   if (campoPesquisaFormsChecklistManut) campoPesquisaFormsChecklistManut.value = '';
   if (campoNotaFormsChecklistManut) campoNotaFormsChecklistManut.value = '';
   if (campoObservacaoFormsChecklistManut) campoObservacaoFormsChecklistManut.value = '';
+  limparGeradorFormsChecklistManut();
   if (previewPacotesFormsChecklistManut) {
     previewPacotesFormsChecklistManut.textContent = '';
     previewPacotesFormsChecklistManut.classList.add('hidden');
@@ -3777,6 +4343,50 @@ btnFormsChecklistManutReset?.addEventListener('click', () => {
   alert('Respostas apagadas.');
 });
 
+geradorFormsChecklistManutEls.trocaMedidorSim?.addEventListener('click', () => {
+  formsChecklistManutGeradorState.trocaMedidor = 'sim';
+  formsChecklistManutGeradorState.trocaIp = '';
+  atualizarGeradorFormsChecklistManut();
+});
+
+geradorFormsChecklistManutEls.trocaMedidorNao?.addEventListener('click', () => {
+  formsChecklistManutGeradorState.trocaMedidor = 'nao';
+  atualizarGeradorFormsChecklistManut();
+});
+
+geradorFormsChecklistManutEls.trocaIpSim?.addEventListener('click', () => {
+  formsChecklistManutGeradorState.trocaIp = 'sim';
+  atualizarGeradorFormsChecklistManut();
+});
+
+geradorFormsChecklistManutEls.trocaIpNao?.addEventListener('click', () => {
+  formsChecklistManutGeradorState.trocaIp = 'nao';
+  atualizarGeradorFormsChecklistManut();
+});
+
+[
+  geradorFormsChecklistManutEls.medidorRetirado,
+  geradorFormsChecklistManutEls.ipRetirado,
+  geradorFormsChecklistManutEls.portaRetirada,
+  geradorFormsChecklistManutEls.medidorInstalado,
+  geradorFormsChecklistManutEls.ipInstalado,
+  geradorFormsChecklistManutEls.portaInstalada,
+  geradorFormsChecklistManutEls.modemLocal,
+  geradorFormsChecklistManutEls.ipLocal,
+  geradorFormsChecklistManutEls.portaLocal,
+  geradorFormsChecklistManutEls.modemLocalTrocaIp,
+  geradorFormsChecklistManutEls.ipRetiradoTrocaIp,
+  geradorFormsChecklistManutEls.portaRetiradaTrocaIp,
+  geradorFormsChecklistManutEls.ipInstaladoTrocaIp,
+  geradorFormsChecklistManutEls.portaInstaladaTrocaIp,
+  geradorFormsChecklistManutEls.observacaoCampo
+].forEach(el => {
+  el?.addEventListener('input', atualizarGeradorFormsChecklistManut);
+  el?.addEventListener('change', atualizarGeradorFormsChecklistManut);
+});
+
+geradorFormsChecklistManutEls.btnCopiarTextoPadrao?.addEventListener('click', copiarTextoGeradorFormsChecklistManut);
+
 btnEnviarFormsChecklistManut?.addEventListener('click', async () => {
   if (!validarFormsChecklistManutAntesDoEnvio()) return;
 
@@ -3839,15 +4449,21 @@ btnEnviarFormsChecklistManut?.addEventListener('click', async () => {
 // BOTÃO INICIAR
 const startFlow = document.getElementById('startFlow');
 if (startFlow) startFlow.addEventListener('click', async () => {
-  showLoader('Estamos consultando a base de notas, aguarde...');
+  if (!dadosExcel.length) {
+    dadosExcel = carregarCacheNotas();
+  }
 
-  try {
-    await carregarNotas();
-  } catch (error) {
-    if (erroFoiTimeoutLoader(error)) return;
-    console.error(error);
-  } finally {
-    hideLoader();
+  if (!dadosExcel.length && navigator.onLine) {
+    showLoader('Estamos consultando a base de notas, aguarde...');
+
+    try {
+      await carregarNotas();
+    } catch (error) {
+      if (erroFoiTimeoutLoader(error)) return;
+      console.error(error);
+    } finally {
+      hideLoader();
+    }
   }
 
   if (!dadosExcel.length) {
