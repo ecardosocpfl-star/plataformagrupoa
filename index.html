@@ -268,26 +268,6 @@ V2.3
       .page {
         width: 94%;
       }
-
-      .calcHeader {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .leftHeader {
-        width: 100%;
-      }
-
-      .rightHeader {
-        width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-
-      .rightHeader .btnReset {
-        flex: 0 1 auto;
-      }
     }
 
     /* LOADER */
@@ -990,11 +970,11 @@ V2.3
       Tabela de Eventos Comentada
     </button>
 
-    <button id="btnChecklistProjetista" class="btnPrimary1">
+    <!--<button id="btnChecklistProjetista" class="btnPrimary1">
       Checklist do Projetista
     </button>
 
-  </section>
+  </section> -->
 
 
 <!--==========================================================================================================-->
@@ -1162,8 +1142,11 @@ V2.3
       <button id="btnFormsChecklistManutReload" class="btnReset">Recarregar base</button>
       <button id="btnFormsChecklistManutReset" class="btnReset">Apagar tudo</button>
       <button class="btnReset" onclick="voltarMenuFormsChecklistManut()">Voltar</button>
+      <button class="btnReset" onclick="voltarMenuFormsChecklistManut()">Forms de Manutenção</button>
     </div>
   </div>
+
+  <h3>Caso não encontre a nota, utilize o forms de manutenção de ponto!</h3>
 
   <label>Escolha a nota:</label>
 
@@ -3831,7 +3814,7 @@ function renderListaFormsChecklistManut(lista) {
 function setRespostaFormsChecklistManut(questionId, value) {
   if (!questionId) return;
 
-  if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+  if (respostaVaziaFormsChecklistManut(value)) {
     delete formsChecklistManutAnswers[questionId];
   } else {
     formsChecklistManutAnswers[questionId] = value;
@@ -3843,6 +3826,13 @@ function setRespostaFormsChecklistManut(questionId, value) {
   agendarSalvarRespostasFormsChecklistManut();
   preencherCamposFormsChecklistManut();
   atualizarVisibilidadeFormsChecklistManut();
+}
+
+function respostaVaziaFormsChecklistManut(value) {
+  if (value === undefined || value === null) return true;
+  if (typeof value === 'string') return value.trim() === '';
+  if (Array.isArray(value)) return value.length === 0;
+  return false;
 }
 
 function criarElementoPerguntaFormsChecklistManut(question, numero) {
@@ -3879,7 +3869,7 @@ function criarElementoPerguntaFormsChecklistManut(question, numero) {
     input.autocomplete = 'off';
 
     input.addEventListener('input', () => {
-      const v = String(input.value ?? '').trim();
+      const v = String(input.value ?? '');
       setRespostaFormsChecklistManut(question.id, v);
     });
 
@@ -3894,7 +3884,7 @@ function criarElementoPerguntaFormsChecklistManut(question, numero) {
     input.type = hasTime ? 'datetime-local' : 'date';
 
     input.addEventListener('input', () => {
-      const v = String(input.value ?? '').trim();
+      const v = String(input.value ?? '');
       setRespostaFormsChecklistManut(question.id, v);
     });
 
@@ -3985,12 +3975,20 @@ function obterProximaPerguntaIdFormsChecklistManut(question) {
   if (!formsChecklistManutModel || !question) return null;
 
   const rawAnswer = formsChecklistManutAnswers[question.id];
+  const idx = formsChecklistManutModel.indexById.get(question.id);
+  const next = typeof idx === 'number' ? formsChecklistManutModel.questions[idx + 1] : null;
+  const nextId = next ? next.id : null;
 
   if (question.type === 'Question.Choice') {
     const choiceType = question.info?.choiceType ?? 1;
     const answerIndex = (choiceType === 1 && rawAnswer !== undefined && rawAnswer !== null && rawAnswer !== '')
       ? Number(rawAnswer)
       : NaN;
+    const roteamentoAtivo = perguntaTemRoteamentoFormsChecklistManut(question);
+
+    if (choiceType === 1 && (rawAnswer === undefined || rawAnswer === null || rawAnswer === '')) {
+      return roteamentoAtivo ? null : nextId;
+    }
 
     if (choiceType === 1 && Number.isFinite(answerIndex)) {
       const target = question.info?.choices?.[answerIndex]?.targetId;
@@ -4002,9 +4000,7 @@ function obterProximaPerguntaIdFormsChecklistManut(question) {
     if (question.info?.targetId) return question.info.targetId;
   }
 
-  const idx = formsChecklistManutModel.indexById.get(question.id);
-  const next = typeof idx === 'number' ? formsChecklistManutModel.questions[idx + 1] : null;
-  return next ? next.id : null;
+  return nextId;
 }
 
 function calcularVisiveisFormsChecklistManut() {
@@ -4045,6 +4041,14 @@ function obterTecnologiaFormsChecklistManut() {
   if (tecnologia === 'gprs') return 'GPRS';
   if (tecnologia === 'outro') return 'Outra';
   return '';
+}
+
+function perguntaTemRoteamentoFormsChecklistManut(question) {
+  if (!question || question.type !== 'Question.Choice') return false;
+  if (question.info?.targetId) return true;
+
+  const choices = Array.isArray(question.info?.choices) ? question.info.choices : [];
+  return choices.some(choice => !!choice?.targetId);
 }
 
 function obterRespostaFormatadaFormsChecklistManut(question) {
@@ -4178,12 +4182,7 @@ function validarFormsChecklistManutAntesDoEnvio() {
     if (!question.required) continue;
 
     const valor = formsChecklistManutAnswers[question.id];
-    const vazio = (
-      valor === undefined ||
-      valor === null ||
-      valor === '' ||
-      (Array.isArray(valor) && valor.length === 0)
-    );
+    const vazio = respostaVaziaFormsChecklistManut(valor);
 
     if (vazio) {
       alert(`Preencha a pergunta obrigatória: "${question.title}"`);
