@@ -972,9 +972,9 @@ V2.3
 
     <!--<button id="btnChecklistProjetista" class="btnPrimary1">
       Checklist do Projetista
-    </button>
+    </button>-->
 
-  </section> -->
+  </section>
 
 
 <!--==========================================================================================================-->
@@ -1142,12 +1142,14 @@ V2.3
       <button id="btnFormsChecklistManutReload" class="btnReset">Recarregar base</button>
       <button id="btnFormsChecklistManutReset" class="btnReset">Apagar tudo</button>
       <button class="btnReset" onclick="voltarMenuFormsChecklistManut()">Voltar</button>
-      <button class="btnReset" onclick="voltarMenuFormsChecklistManut()">Forms de Manutenção</button>
+      <button class="btnReset" 
+        onclick="window.open('https://forms.office.com/Pages/ShareFormPage.aspx?id=GGZUkwri00-ohJ4zynI0p1lwPSaPlVJPvb9csjjusGhUOTZTV0NJUEtZWEJTMVZVTDFTWVFNMENLQy4u&sharetoken=Ql7ifZFWSSI5ok8edLMR', '_blank')">
+        Forms de Manutenção
+      </button>
     </div>
   </div>
 
   <h3>Caso não encontre a nota, utilize o forms de manutenção de ponto!</h3>
-
   <label>Escolha a nota:</label>
 
   <div style="position: relative;">
@@ -5383,7 +5385,7 @@ if (startLogin) {
       return;
     }
 
-    showLoaderSemTimeout('Estamos validando seu acesso, aguarde...');
+    showLoaderSemTimeout('Estamos validando seu acesso e carregando as bases, aguarde...');
 
     try {
       const res = await fetchComLoader(LOGIN_URL, {
