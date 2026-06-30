@@ -1200,7 +1200,6 @@ V2.5
 
     <div class="rightHeader">
       <button id="btnFormsChecklistManutReload" class="btnReset">Recarregar base</button>
-      <button id="btnFormsChecklistManutReset" class="btnReset">Apagar tudo</button>
       <button class="btnReset" onclick="voltarMenuFormsChecklistManut()">Voltar</button>
     </div>
   </div>
@@ -2233,7 +2232,6 @@ const btnRecarregarFormsChecklistManut = document.getElementById('btnRecarregarF
 const elFormsChecklistManutTitulo = document.getElementById('formsChecklistManutTitulo');
 const elFormsChecklistManutPerguntas = document.getElementById('formsChecklistManutPerguntas');
 const btnFormsChecklistManutReload = document.getElementById('btnFormsChecklistManutReload');
-const btnFormsChecklistManutReset = document.getElementById('btnFormsChecklistManutReset');
 const campoPesquisaFormsChecklistManut = document.getElementById('notaPesquisaFormsChecklistManut');
 const listaNotasFormsChecklistManut = document.getElementById('listaNotasFormsChecklistManut');
 const campoNotaFormsChecklistManut = document.getElementById('notaFormsChecklistManut');
@@ -3247,11 +3245,6 @@ btnFecharListaFormsChecklistManut?.addEventListener('click', () => {
 btnFormsChecklistManutReload?.addEventListener('click', async () => {
   await carregarNotasManutencao();
   renderListaFormsChecklistManut(dadosManutencao);
-});
-
-btnFormsChecklistManutReset?.addEventListener('click', () => {
-  resetarFormsChecklistManut();
-  alert('Respostas apagadas.');
 });
 
 geradorFormsChecklistManutEls.trocaMedidorSim?.addEventListener('click', () => {
