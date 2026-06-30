@@ -95,6 +95,16 @@ V2.5
     color: #fff;
     }
 
+    .btnFIM {
+    background: #0078D7;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    }
+
 
     h2 {
       color: #003b5c;
@@ -1201,6 +1211,7 @@ V2.5
     <div class="rightHeader">
       <button id="btnFormsChecklistManutReload" class="btnReset">Recarregar base</button>
       <button class="btnReset" onclick="voltarMenuFormsChecklistManut()">Voltar</button>
+      <button id="btnLimparFormsChecklistManut" type="button" class="btnFIM">Finalizar</button>
     </div>
   </div>
 
@@ -2289,124 +2300,57 @@ const formsChecklistManutGeradorState = {
   trocaIp: ''
 };
 
-const FORMS_CHECKLIST_MANUT_IDS_BASE = new Set([
-  'CHECKMANUTEQP',
-  'CHECKMANUTMATRICULA1',
-  'CHECKMANUTMATRICULA2',
-  'r102eb3c68b874b669af7360138d7bf7a',
-  'rb5efb84f8d684a11874b0972154aaeef',
-  'r4455c2d570dd465f8634271be7c5b34d'
-]);
+  document
+    .getElementById("btnLimparFormsChecklistManut")
+    .addEventListener("click", function () {
+      const secao = document.getElementById("formsChecklistManut");
 
-const FORMS_CHECKLIST_MANUT_IDS_INFRA = new Set([
-  're55644f74b954d8c962f0500881585ab',
-  'r14435299610646279b7d2a8990ee0953',
-  'r60dec53ca030408eaadb2d2c21c0ead4',
-  'r83bf6eb8260f425fbf4ab68b84b55119',
-  'r023495b8a7894325a2f108a2d238719f',
-  'rf54e5dad4f494dd5b7554bd425f71d88',
-  'ref7554455f684dfea51eb21318deca67',
-  'r5d73cd8393934bf58a29499b6bc03c17',
-  'r5b15540fe17e4c5099c33352f8b85f3e',
-  're652d6733e6243949872ca6b3f860397'
-]);
+      // Limpa inputs, textareas e selects dentro da tela
+      secao.querySelectorAll("input, textarea, select").forEach((campo) => {
+        if (campo.type === "checkbox" || campo.type === "radio") {
+          campo.checked = false;
+        } else {
+          campo.value = "";
+        }
 
-const FORMS_CHECKLIST_MANUT_IDS_FINAL = new Set([
-  'r5f8a3f2bad76457daab3cfd0a75b599e',
-  'ree30bfa70dcf47b0b176acea67789335',
-  'rcdb2275bbc214b808ec4f9a2168d97c8',
-  'r6b50fccf3438432f9ac1694d4996e279',
-  'r4f0cfb92662142a28cc5e931aff7a864',
-  'rb57ffef5855a45e08db814e7faece128',
-  'r5d567b6cdd454ebfb5119e6c88b94abb',
-  'FINAL_NOME_COLABORADOR_COT_OUTROS',
-  'r5ce63d2e80194c6286aca8b4b28b28e8',
-  'rfb3b155f6096492ba9db296d5dcebf73',
-  'red892f7330164ff4a5099cc7ce89cc39',
-  'r4a15c39307ce401db657ace3c4c39dbf',
-  'ra0e6a9f6f0e5431ba543f40f4ea7282a',
-  'r0a99523744c74235bb3103403674ea6a',
-  'ra46ae3ec871c45539258bf17df275e5b',
-  'r9b5291cffced4dd4b8d6919246c6eb85'
-]);
+        campo.dispatchEvent(new Event("input", { bubbles: true }));
+        campo.dispatchEvent(new Event("change", { bubbles: true }));
+      });
 
-const FORMS_CHECKLIST_MANUT_ALIAS = {
-  CHECKMANUTEQP: 'BASE_NUMERO_EQUIPE',
-  CHECKMANUTMATRICULA1: 'BASE_MATRICULA_ELETRICISTA_1',
-  CHECKMANUTMATRICULA2: 'BASE_MATRICULA_ELETRICISTA_2',
-  r102eb3c68b874b669af7360138d7bf7a: 'BASE_DATA_VISITA',
-  rb5efb84f8d684a11874b0972154aaeef: 'BASE_GERENCIA',
-  r4455c2d570dd465f8634271be7c5b34d: 'BASE_TEVE_ACESSO_MEDICAO',
-  re55644f74b954d8c962f0500881585ab: 'INFRA_EQUIPAMENTOS_EM_BOM_ESTADO',
-  r14435299610646279b7d2a8990ee0953: 'INFRA_CONSEGUIU_REGULARIZAR',
-  r60dec53ca030408eaadb2d2c21c0ead4: 'INFRA_O_QUE_FOI_REGULARIZADO',
-  r83bf6eb8260f425fbf4ab68b84b55119: 'INFRA_DESCRICAO_REGULARIZACAO',
-  r023495b8a7894325a2f108a2d238719f: 'INFRA_MOTIVO_NAO_REGULARIZOU',
-  rf54e5dad4f494dd5b7554bd425f71d88: 'INFRA_MEDIDOR_NOTA_DIFERENTE_CAMPO',
-  ref7554455f684dfea51eb21318deca67: 'INFRA_MARCA_MODELO_MEDIDOR_CAMPO',
-  r5d73cd8393934bf58a29499b6bc03c17: 'INFRA_NUMERO_MEDIDOR_CAMPO',
-  r5b15540fe17e4c5099c33352f8b85f3e: 'INFRA_TIPO_CLIENTE',
-  re652d6733e6243949872ca6b3f860397: 'INFRA_EQUIPAMENTOS_ENERGIZADOS',
-  r074696a242b34086af323ed8b9688cbb: 'BASE_TIPO_TECNOLOGIA',
-  r3a28f9cf82014ed9bec2a0874c5141b1: 'MESH_NUMERO_MEDIDOR_MAC_IP',
-  ra987be34a43f447c8ff481de5c8a4da4: 'MESH_MEDIDOR_PERDEU_PARAMETROS',
-  r7eeed579c81f4dd7a31f5280a6bfd88e: 'MESH_MOTIVO_NAO_REPROGRAMOU',
-  ra66409b061434f4b8e21e6a1ea8a2917: 'MESH_TESTE_DLMS_RETORNOU_MEDIDOR',
-  r9c225d33c4254a33b4552fa723f08461: 'MESH_MOTIVO_NAO_CORRIGIU_DLMS',
-  rbee9d0f60faf4f04bf0dc3b478927c3e: 'MESH_FAIXA_SINAL_FSU',
-  r7565b79002ce4dc8a8cb1503f0a2bb9f: 'MESH_TEM_ANTENA_EXTERNA_CONFIGURADA',
-  r4a18df5be0934e1c9ce0c2f577116861: 'MESH_FOI_POSSIVEL_INSTALAR_ANTENA_EXTERNA',
-  r65db52d9a5f84483a6079334b62dfdcd: 'MESH_MOTIVO_NAO_INSTALOU_ANTENA_EXTERNA',
-  rb4d45229f15c4342b14a26936ac067ea: 'MESH_TEM_ANTENA_INTERNA',
-  r74f97fbf96ad4a6bbd378f933232819d: 'MESH_MOTIVO_NAO_INSTALOU_ANTENA_INTERNA',
-  r511aa888e2b544efb23cf4dd4621afb7: 'MESH_DESCRICAO_ALTURA_GANHO_TIPO_ANTENA',
-  rb4a2f5f5f4d5423d86f29b90159856f0: 'MESH_RESETS_REALIZADOS',
-  r8209330389894d7695ce42e6cd5dbfab: 'GPRS_IP_PORTA_MEDIDORES',
-  r3bfa9f199d5041a49d8cb69a7ab8f81a: 'GPRS_CHIP_REINSERIDO',
-  r1d473788051f465f9276f10900a703c9: 'GPRS_CHIP_UTILIZADO',
-  ra666fb02e00c45309d8b02a3444a9027: 'GPRS_MEDIDOR_PERDEU_PARAMETROS',
-  r9915f279b2614e80842ad9661ebdba82: 'GPRS_MOTIVO_NAO_REPROGRAMOU',
-  r0b23fa5b3c8a4898bb1cfa4149b9b431: 'GPRS_MEDICAO_TEM_MODEM_EXTERNO',
-  r05307016e2b242d5ab7673612e83e64a: 'GPRS_MARCA_MODELO_MODEM',
-  r9af71385defd40b68dda671524d12a49: 'GPRS_USUARIO_SENHA_MODEM_CORRETOS',
-  rd0b4a8445a3344a1bedecf508719085a: 'GPRS_MOTIVO_NAO_CORRIGIU_PARAMETROS_MODEM',
-  ra52ff6c086ae4c229e6b7311b37259e2: 'GPRS_NAT_IP_FISICO_CONFERE',
-  r319ca08ee4d94c708609d69ed7b99cdc: 'GPRS_MOTIVO_NAO_CORRIGIU_NAT',
-  r7bb57961f108461488423dc44049f797: 'GPRS_CORRECAO_REALIZADA_MODEM',
-  r33e7d08ebfba41d68c41fd608d8866f7: 'GPRS_VERIFICOU_VELOCIDADE_MODEM',
-  r9de778723ec94ba08f79d80f648efc9b: 'GPRS_FAIXA_SINAL_COMUNICACAO',
-  r5e380a9d7bc041618a531af22fdf3ef3: 'GPRS_TEM_ANTENA_EXTERNA',
-  r643286b740414415a9c4a7a4d083a783: 'GPRS_FOI_POSSIVEL_INSTALAR_ANTENA_EXTERNA',
-  r5fda733f632e4d038e6976abd0572293: 'GPRS_MOTIVO_NAO_INSTALOU_ANTENA_EXTERNA',
-  r4a9c98c2d8a9424e8294dbfe9504d1a6: 'GPRS_DESCRICAO_ALTURA_GANHO_TIPO_ANTENA',
-  rf05c0687505c456a86ea1ca9d0eb817b: 'GPRS_SELF_TEST_REALIZADO',
-  r32dcc1ead9f0404baf90b8ec67362cd9: 'GPRS_MOTIVO_NAO_REALIZOU_SELF_TEST',
-  r224fa4b9150f4d4493c4e2db64a43c02: 'GPRS_SELF_TEST_APROVA_COMUNICACAO',
-  rca0b0fcc08a641e68c731b59a0a03768: 'OUTRA_DESCRICAO_TECNOLOGIA',
-  r557afa9c14cd493cb8233d94988bb354: 'OUTRA_IP_PORTA_MEDIDORES',
-  r83650b898c844d5fa2b5472c5de834ee: 'OUTRA_MEDIDOR_PERDEU_PARAMETROS',
-  rfe85167e678841a8ac03264822e22e7f: 'OUTRA_MOTIVO_NAO_REPROGRAMOU',
-  r88e04cd720cc48019f741ac27bfad04b: 'OUTRA_SELF_TEST_REALIZADO',
-  r5d506977a23846d9a5fe19bd0ea4edb5: 'OUTRA_MOTIVO_NAO_REALIZOU_SELF_TEST',
-  r1ac3edb6940d4b198681373f05726e0a: 'OUTRA_SELF_TEST_APROVA_COMUNICACAO',
-  rfcb04da9672944edaa74449c80ab788b: 'OUTRA_EQUIPAMENTO_NAO_IDENTIFICADO',
-  r5f8a3f2bad76457daab3cfd0a75b599e: 'FINAL_CONTATO_COT_FLUXO_PADRAO',
-  ree30bfa70dcf47b0b176acea67789335: 'FINAL_CADASTRO_MDC_CORRETO',
-  rcdb2275bbc214b808ec4f9a2168d97c8: 'FINAL_CONTATO_COT_APOS_RESET',
-  r6b50fccf3438432f9ac1694d4996e279: 'FINAL_DETALHE_TENTATIVA_CONTATO_COT',
-  r4f0cfb92662142a28cc5e931aff7a864: 'FINAL_PONTO_VOLTOU_COMUNICAR',
-  rb57ffef5855a45e08db814e7faece128: 'FINAL_MOTIVO_PONTO_NAO_VOLTOU_COMUNICAR',
-  r5d567b6cdd454ebfb5119e6c88b94abb: 'FINAL_COLABORADOR_COT',
-  FINAL_NOME_COLABORADOR_COT_OUTROS: 'FINAL_COLABORADOR_COT_OUTROS',
-  r5ce63d2e80194c6286aca8b4b28b28e8: 'FINAL_TROCOU_MEDIDOR',
-  rfb3b155f6096492ba9db296d5dcebf73: 'FINAL_NUMERO_NOVO_MEDIDOR',
-  red892f7330164ff4a5099cc7ce89cc39: 'FINAL_MEDIDOR_TEM_NOVO_IP_OU_MAC',
-  r4a15c39307ce401db657ace3c4c39dbf: 'FINAL_NOVO_IP_OU_MAC_MEDIDOR',
-  ra0e6a9f6f0e5431ba543f40f4ea7282a: 'FINAL_EXISTE_PENDENCIA',
-  r0a99523744c74235bb3103403674ea6a: 'FINAL_AREA_ENCAMINHAMENTO_PENDENCIA',
-  ra46ae3ec871c45539258bf17df275e5b: 'FINAL_RESUMO_PENDENCIA',
-  r9b5291cffced4dd4b8d6919246c6eb85: 'FINAL_OBSERVACAO_ADICIONAL'
-};
+      // Remove marcação dos botões Sim/Não
+      secao.querySelectorAll(".btnCheck").forEach((botao) => {
+        botao.classList.remove("active", "ativo", "selected", "selecionado");
+        botao.setAttribute("aria-pressed", "false");
+      });
+
+      [
+        "listaNotasFormsChecklistManut",
+        "geradorTrocaMedidorSimCampos",
+        "geradorTrocaMedidorNaoBloco",
+        "geradorTrocaMedidorNaoSemIpCampos",
+        "geradorTrocaMedidorNaoComIpCampos",
+        "geradorObservacaoBloco",
+        "geradorSaidaBloco"
+      ].forEach((id) => {
+        const elemento = document.getElementById(id);
+
+        if (elemento) {
+          if (id === "listaNotasFormsChecklistManut") {
+            elemento.style.display = "none";
+          } else {
+            elemento.classList.add("hidden");
+          }
+        }
+      });
+
+      // Recarrega o iframe do Forms, igual um F5 só nele
+      const iframe = document.getElementById("formsChecklistManutFrame");
+      if (iframe && iframe.src) {
+        iframe.src = iframe.src;
+      }
+
+      window.location.reload();
+  });
 
 function obterAliasPerguntaFormsChecklistManut(questionId) {
   return FORMS_CHECKLIST_MANUT_ALIAS[questionId] || questionId;
